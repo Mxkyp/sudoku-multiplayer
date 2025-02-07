@@ -1,6 +1,8 @@
 package game.logic;
 
 
+import board.SudokuCell;
+
 public interface SudokuGenerator {
     enum Difficulty {
         EASY,
@@ -8,5 +10,5 @@ public interface SudokuGenerator {
         HARD;
     }
 
-    int[][] generateSudoku(Difficulty difficulty);
+    SudokuCell[][] generateSudoku(Difficulty difficulty);
 }
