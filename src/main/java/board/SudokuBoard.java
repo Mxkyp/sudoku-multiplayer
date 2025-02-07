@@ -1,30 +1,12 @@
 package board;
+import game.logic.SudokuDimensions;
 import game.logic.SudokuGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class SudokuBoard {
-    public static final int BOARD_SIZE = 9;
+public final class SudokuBoard extends SudokuDimensions {
     private final Logger logger = LoggerFactory.getLogger(SudokuBoard.class);
-    SudokuCell[][] board = new SudokuCell[BOARD_SIZE][BOARD_SIZE];
-
-    private void initBoard(final SudokuCell[][] boardToInit,
-                           final int[][] values)            {
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                boardToInit[i][j] = new SudokuCell(values[i][j]);
-            }
-        }
-    }
-
-    private void initBoard(final SudokuCell[][] boardToInit,
-                           final SudokuCell[][] values)            {
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                boardToInit[i][j] = new SudokuCell(values[i][j].getValue());
-            }
-        }
-    }
+    private SudokuCell[][] board = new SudokuCell[BOARD_SIZE][BOARD_SIZE];
 
     public SudokuBoard(final int[][] dummyBoard) {
         initBoard(this.board, dummyBoard);
@@ -47,11 +29,9 @@ public final class SudokuBoard {
 
     public int getCellValue(final int rowIndex, final int colIndex) {
         int result = -1;
-        final int minIndex = 0;
-        final int maxIndex = 8;
 
-        if (rowIndex >= minIndex && colIndex >= minIndex
-             && rowIndex <= maxIndex && colIndex <= maxIndex) {
+        if (rowIndex >= MIN_INDEX && colIndex >= MIN_INDEX
+             && rowIndex <= MAX_INDEX && colIndex <= MAX_INDEX) {
             result = this.board[rowIndex][colIndex].getValue();
         }
 
@@ -72,5 +52,23 @@ public final class SudokuBoard {
         }
 
         logger.info(buffer.toString());
+    }
+
+    private void initBoard(final SudokuCell[][] boardToInit,
+                           final int[][] values)            {
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                boardToInit[i][j] = new SudokuCell(values[i][j]);
+            }
+        }
+    }
+
+    private void initBoard(final SudokuCell[][] boardToInit,
+                           final SudokuCell[][] values)            {
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                boardToInit[i][j] = new SudokuCell(values[i][j].getValue());
+            }
+        }
     }
 }

@@ -23,13 +23,11 @@ class SudokuBoardTest {
             {0, 0, 0, 0, 8, 0, 0, 7, 9}
     };
 
-    @BeforeEach
-    void setTestBoard(){
+    @BeforeEach void setTestBoard(){
         testBoard = new SudokuBoard(sampleBoard);
     }
 
-    @Test
-    void testInit(){
+    @Test void testInit(){
         for (int i = 0; i < SudokuBoard.BOARD_SIZE; i++) {
             for (int j = 0; j < SudokuBoard.BOARD_SIZE; j++) {
                assertEquals(sampleBoard[i][j], testBoard.getCellValue(i,j));
@@ -38,8 +36,8 @@ class SudokuBoardTest {
 
     }
 
-    @Test
-    void testGetBoard(){
+    //get shall return a hardcopy
+    @Test void testGetBoard(){
         SudokuCell[][] boardCopy = testBoard.getBoard();
 
         boardCopy[0][0].setValue(10);
@@ -47,13 +45,13 @@ class SudokuBoardTest {
         assertNotEquals(testBoard.getCellValue(0, 0), boardCopy[0][0].getValue());
     }
 
-    @Test
-    void testGetCellValue(){
-
+    //trying to get a value outside the board index_range returns -1
+    @Test void testGetCellValue(){
+        assertEquals(-1, testBoard.getCellValue(-1,-1));
+        assertEquals(-1, testBoard.getCellValue(10,10));
     }
 
-    @Test
-    void testPrintBoard(){
+    @Test void testPrintBoard(){
         //create an expectedRepresenation using stringBuilder
         final StringBuilder buffer = new StringBuilder();
         buffer.append("\n");
