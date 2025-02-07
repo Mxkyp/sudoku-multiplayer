@@ -1,4 +1,5 @@
 package board;
+import game.logic.SudokuGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -7,16 +8,37 @@ public final class SudokuBoard {
     private final Logger logger = LoggerFactory.getLogger(SudokuBoard.class);
     SudokuCell[][] board = new SudokuCell[BOARD_SIZE][BOARD_SIZE];
 
-    public SudokuBoard(final int[][] dummyBoard) {
+    private void initBoard(final SudokuCell[][] boardToInit,
+                           final int[][] values)            {
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
-                board[i][j] = new SudokuCell(dummyBoard[i][j]);
+                boardToInit[i][j] = new SudokuCell(values[i][j]);
             }
         }
     }
 
+    private void initBoard(final SudokuCell[][] boardToInit,
+                           final SudokuCell[][] values)            {
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                boardToInit[i][j] = new SudokuCell(values[i][j].getValue());
+            }
+        }
+    }
+
+    public SudokuBoard(final int[][] dummyBoard) {
+        initBoard(this.board, dummyBoard);
+    }
+
+    public SudokuBoard(final SudokuGenerator sudokuGenerator) {
+
+    }
+
     public SudokuCell[][] getBoard() {
-        return board;
+        SudokuCell[][] boardCopy = new SudokuCell[BOARD_SIZE][BOARD_SIZE];
+        initBoard(boardCopy, this.board);
+
+        return boardCopy;
     }
 
     public void setBoard(final SudokuCell[][] board) {

@@ -1,33 +1,35 @@
 package board;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class SudokuBoardTest {
+    SudokuBoard testBoard;
+    final static int[][] sampleBoard = {
+            {5, 3, 0, 0, 7, 0, 0, 0, 0},
+            {6, 0, 0, 1, 9, 5, 0, 0, 0},
+            {0, 9, 8, 0, 0, 0, 0, 6, 0},
+            {8, 0, 0, 0, 6, 0, 0, 0, 3},
+            {4, 0, 0, 8, 0, 3, 0, 0, 1},
+            {7, 0, 0, 0, 2, 0, 0, 0, 6},
+            {0, 6, 0, 0, 0, 0, 2, 8, 0},
+            {0, 0, 0, 4, 1, 9, 0, 0, 5},
+            {0, 0, 0, 0, 8, 0, 0, 7, 9}
+    };
+
+    @BeforeEach
+    void setTestBoard(){
+        testBoard = new SudokuBoard(sampleBoard);
+    }
 
     @Test
     void testInit(){
-        final int[][] sampleBoard = {
-                {5, 3, 0, 0, 7, 0, 0, 0, 0},
-                {6, 0, 0, 1, 9, 5, 0, 0, 0},
-                {0, 9, 8, 0, 0, 0, 0, 6, 0},
-                {8, 0, 0, 0, 6, 0, 0, 0, 3},
-                {4, 0, 0, 8, 0, 3, 0, 0, 1},
-                {7, 0, 0, 0, 2, 0, 0, 0, 6},
-                {0, 6, 0, 0, 0, 0, 2, 8, 0},
-                {0, 0, 0, 4, 1, 9, 0, 0, 5},
-                {0, 0, 0, 0, 8, 0, 0, 7, 9}
-        };
-
-
-        SudokuBoard testBoard = new SudokuBoard(sampleBoard);
-
         for (int i = 0; i < SudokuBoard.BOARD_SIZE; i++) {
             for (int j = 0; j < SudokuBoard.BOARD_SIZE; j++) {
                assertEquals(sampleBoard[i][j], testBoard.getCellValue(i,j));
@@ -37,19 +39,21 @@ class SudokuBoardTest {
     }
 
     @Test
-    void testPrintBoard(){
-        final int[][] sampleBoard = {
-                {5, 3, 0, 0, 7, 0, 0, 0, 0},
-                {6, 0, 0, 1, 9, 5, 0, 0, 0},
-                {0, 9, 8, 0, 0, 0, 0, 6, 0},
-                {8, 0, 0, 0, 6, 0, 0, 0, 3},
-                {4, 0, 0, 8, 0, 3, 0, 0, 1},
-                {7, 0, 0, 0, 2, 0, 0, 0, 6},
-                {0, 6, 0, 0, 0, 0, 2, 8, 0},
-                {0, 0, 0, 4, 1, 9, 0, 0, 5},
-                {0, 0, 0, 0, 8, 0, 0, 7, 9}
-        };
+    void testGetBoard(){
+        SudokuCell[][] boardCopy = testBoard.getBoard();
 
+        boardCopy[0][0].setValue(10);
+
+        assertNotEquals(testBoard.getCellValue(0, 0), boardCopy[0][0].getValue());
+    }
+
+    @Test
+    void testGetCellValue(){
+
+    }
+
+    @Test
+    void testPrintBoard(){
         //create an expectedRepresenation using stringBuilder
         final StringBuilder buffer = new StringBuilder();
         buffer.append("\n");
