@@ -1,13 +1,18 @@
+/***
+ * Class representing the 3x3 sudoku 'subBoard',
+ * each sudoku gameBoard consists of 9 subboards
+ */
 package board;
 
-import game.logic.SudokuDimensions;
 
 import java.awt.Point;
+
+import static game.logic.SudokuDimensions.SUB_BOARD_SIZE;
 
 /***
  * subBoards are indexed 0-9 from left-right top-bottom
  */
-public final class SudokuSubBoard extends SudokuDimensions {
+public final class SudokuSubBoard  {
     private SudokuCell[][] board =
             new SudokuCell[SUB_BOARD_SIZE][SUB_BOARD_SIZE];
 

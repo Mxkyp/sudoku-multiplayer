@@ -1,3 +1,6 @@
+/***
+ * class representing a singular Cell
+ */
 package board;
 
 public final class SudokuCell {

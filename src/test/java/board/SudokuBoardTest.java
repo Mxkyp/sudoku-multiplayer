@@ -7,6 +7,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
+import static game.logic.SudokuDimensions.BOARD_SIZE;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SudokuBoardTest {
@@ -28,8 +29,8 @@ class SudokuBoardTest {
     }
 
     @Test void testInit(){
-        for (int i = 0; i < SudokuBoard.BOARD_SIZE; i++) {
-            for (int j = 0; j < SudokuBoard.BOARD_SIZE; j++) {
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
                assertEquals(sampleBoard[i][j], testBoard.getCellValue(i,j));
             }
         }

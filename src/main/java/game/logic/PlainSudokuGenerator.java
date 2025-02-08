@@ -1,12 +1,17 @@
+/***
+ * Class which genenerates a sudoku with a unique solution
+ */
 package game.logic;
-
 
 import board.SudokuCell;
 
 import java.util.Random;
 
-public final class PlainSudokuGenerator
-        extends SudokuDimensions implements SudokuGenerator {
+import static game.logic.SudokuDimensions.BOARD_SIZE;
+import static game.logic.SudokuDimensions.MIN_INDEX;
+import static game.logic.SudokuDimensions.MAX_INDEX;
+
+public final class PlainSudokuGenerator implements SudokuGenerator {
 
     @Override
     public SudokuCell[][] generateSudoku(final Difficulty difficulty) {

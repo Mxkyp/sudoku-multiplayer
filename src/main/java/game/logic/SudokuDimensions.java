@@ -1,8 +1,15 @@
 package game.logic;
 
-public abstract class SudokuDimensions {
+public final class SudokuDimensions {
+
+    private SudokuDimensions() {
+        throw new UnsupportedOperationException("This is a utility class "
+                + "and cannot be instantiated");
+    }
+
     //number of rows and columns in the main board
     public static final int BOARD_SIZE = 9;
+
     public static final int NR_OF_SUBBOARDS = 9;
 
     public static final int MIN_INDEX = 0;

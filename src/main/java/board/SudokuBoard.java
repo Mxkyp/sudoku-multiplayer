@@ -1,10 +1,20 @@
+/***
+ * Class representing the 9x9 sudoku game board, which consists of:
+ * 81 cells which references are also stored as:
+ * 1.nine 3x3 'subBoards'
+ * 2.nine rows
+ * 3.nine columns
+ */
 package board;
-import game.logic.SudokuDimensions;
 import game.logic.SudokuGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class SudokuBoard extends SudokuDimensions {
+import static game.logic.SudokuDimensions.BOARD_SIZE;
+import static game.logic.SudokuDimensions.MIN_INDEX;
+import static game.logic.SudokuDimensions.MAX_INDEX;
+
+public final class SudokuBoard  {
     private final Logger logger = LoggerFactory.getLogger(SudokuBoard.class);
     private SudokuCell[][] board = new SudokuCell[BOARD_SIZE][BOARD_SIZE];
 
