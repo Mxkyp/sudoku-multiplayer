@@ -2,7 +2,7 @@ package lines;
 
 import board.SudokuBoard;
 import board.SudokuCell;
-import constans.Enums.State;
+import game.logic.Sudoku;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -46,12 +46,12 @@ class SudokuRowTest {
     @Test void testGetState() {
         SudokuCell[][] sampleBoard = testBoard.getBoard();
         SudokuRow row = new SudokuRow(sampleBoard, 0);
-        assertEquals(State.UNKNOWN, row.getState());
+        assertEquals(Sudoku.State.UNKNOWN, Sudoku.verify(row));
 
         SudokuRow row2 = new SudokuRow(sampleBoard, 1);
-        assertEquals(State.CORRECT, row2.getState());
+        assertEquals(Sudoku.State.CORRECT, Sudoku.verify(row2));
 
         SudokuRow row3 = new SudokuRow(sampleBoard, 2);
-        assertEquals(State.WRONG, row3.getState());
+        assertEquals(Sudoku.State.WRONG, Sudoku.verify(row3));
     }
 }

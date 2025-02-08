@@ -2,7 +2,7 @@ package lines;
 
 import board.SudokuBoard;
 import board.SudokuCell;
-import constans.Enums.State;
+import game.logic.Sudoku;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -46,13 +46,13 @@ class SudokuColumnTest {
     @Test void testGetState() {
         SudokuCell[][] sampleBoard = testBoard.getBoard();
         SudokuColumn col = new SudokuColumn(sampleBoard, 0);
-        assertEquals(State.UNKNOWN, col.getState());
+        assertEquals(Sudoku.State.UNKNOWN, Sudoku.verify(col));
 
         SudokuColumn col2 = new SudokuColumn(sampleBoard, 1);
-        assertEquals(State.CORRECT, col2.getState());
+        assertEquals(Sudoku.State.CORRECT, Sudoku.verify(col2));
 
         SudokuColumn col3 = new SudokuColumn(sampleBoard, 2);
-        assertEquals(State.WRONG, col3.getState());
+        assertEquals(Sudoku.State.WRONG, Sudoku.verify(col3));
     }
 
 }

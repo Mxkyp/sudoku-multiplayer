@@ -4,21 +4,20 @@
  */
 package board;
 
-import constans.Enums.State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.Point;
 
+import static constans.Dimensions.SUB_BOARD_SIZE;
 import static constans.Dimensions.SUB_MAX_INDEX;
 import static constans.Dimensions.SUB_MIN_INDEX;
-import static constans.Dimensions.SUB_BOARD_SIZE;
 
 
 /***
  * subBoards are indexed 0-9 from left-right top-bottom
  */
-public final class SudokuSubBoard  {
+public final class SudokuSubBoard extends Board {
     private static final Logger logger =
             LoggerFactory.getLogger(SudokuSubBoard.class);
     private SudokuCell[][] board =
@@ -44,52 +43,18 @@ public final class SudokuSubBoard  {
                        subBoardLeftCornerRowNr[subBoardIndex / SUB_BOARD_SIZE]);
    }
 
-    public int getCellValue(final int rowIndex, final int colIndex) {
-        int result = -1;
 
-        if (rowIndex >= SUB_MIN_INDEX && colIndex >= SUB_MIN_INDEX
-                && rowIndex <= SUB_MAX_INDEX && colIndex <= SUB_MAX_INDEX) {
-            result = this.board[rowIndex][colIndex].getValue();
-        }
+  public SudokuCell[][] getBoard() {
+    return super.getBoard(SUB_BOARD_SIZE, this.board);
+  }
 
-        return result;
-    }
+  public int getCellValue(final int rowIndex, final int colIndex) {
+    return super.getCellValue(rowIndex, colIndex,
+            SUB_MAX_INDEX, SUB_MIN_INDEX, this.board);
+  }
 
-
-    public State getState() {
-        final int nrOfPossibleValues = 10; //0 == unfilled, 1 to 9
-        int[] occurenceCount = new int[nrOfPossibleValues];
-
-        for (SudokuCell[] row: board) {
-            for (SudokuCell cell: row) {
-                occurenceCount[cell.getValue()]++;
-            }
-        }
-
-        int maxOccurence = 0;
-        int minOccurence = Integer.MAX_VALUE;
-
-        // starts from 1 because zero's
-        // (which occurence number is at index zero)
-        // represent empty cells
-        for (int i = 1; i < nrOfPossibleValues; i++) {
-            if (occurenceCount[i] > maxOccurence) {
-                maxOccurence = occurenceCount[i];
-            } else if (occurenceCount[i] < minOccurence) {
-                minOccurence = occurenceCount[i];
-            }
-        }
-
-        State computedState;
-        if (maxOccurence > 1) {
-            computedState = State.WRONG;
-        } else if (maxOccurence != 1 || minOccurence != 1) {
-            computedState = State.UNKNOWN;
-        } else {
-            computedState = State.CORRECT;
-        }
-
-        return computedState;
-    }
+  public void printBoard() {
+    super.printBoard(this.board);
+  }
 
 }
