@@ -4,6 +4,7 @@
  */
 package board;
 
+import constans.Enums.State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,6 +53,43 @@ public final class SudokuSubBoard  {
         }
 
         return result;
+    }
+
+
+    public State getState() {
+        final int nrOfPossibleValues = 10; //0 == unfilled, 1 to 9
+        int[] occurenceCount = new int[nrOfPossibleValues];
+
+        for (SudokuCell[] row: board) {
+            for (SudokuCell cell: row) {
+                occurenceCount[cell.getValue()]++;
+            }
+        }
+
+        int maxOccurence = 0;
+        int minOccurence = Integer.MAX_VALUE;
+
+        // starts from 1 because zero's
+        // (which occurence number is at index zero)
+        // represent empty cells
+        for (int i = 1; i < nrOfPossibleValues; i++) {
+            if (occurenceCount[i] > maxOccurence) {
+                maxOccurence = occurenceCount[i];
+            } else if (occurenceCount[i] < minOccurence) {
+                minOccurence = occurenceCount[i];
+            }
+        }
+
+        State computedState;
+        if (maxOccurence > 1) {
+            computedState = State.WRONG;
+        } else if (maxOccurence != 1 || minOccurence != 1) {
+            computedState = State.UNKNOWN;
+        } else {
+            computedState = State.CORRECT;
+        }
+
+        return computedState;
     }
 
 }

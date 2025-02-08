@@ -1,35 +1,16 @@
-package lines;
+package game.logic;
 
 import board.SudokuCell;
 import constans.Enums;
 
-import java.util.Collections;
-import java.util.List;
-import constans.Enums.State;
-
-public abstract class SudokuLine {
-    private List<SudokuCell> members;
-
-    /**
-     * @return an unmodifiable list of the line's members
-     */
-    public List<SudokuCell> getMembers() {
-        return Collections.unmodifiableList(members);
-    }
-
-    /***
-     * @param members: a list of references to cell in that line
-     */
-    public void setMembers(final List<SudokuCell> members) {
-        this.members = members;
+public final class SudokuValidator {
+    private SudokuValidator() {
+        throw new UnsupportedOperationException("This is a utility class "
+                + "and cannot be instantiated");
     }
 
 
-    /***
-     * returns whether the line is a valid
-     * (has only one of each digit from 1-9)
-     */
-    public State getState() {
+    public static Enums.State getState() {
         final int nrOfPossibleValues = 10; //0 == unfilled, 1 to 9
         int[] occurenceCount = new int[nrOfPossibleValues];
 
