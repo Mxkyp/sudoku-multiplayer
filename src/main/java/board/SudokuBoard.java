@@ -16,7 +16,7 @@ import static game.logic.SudokuDimensions.MAX_INDEX;
 
 public final class SudokuBoard  {
     private final Logger logger = LoggerFactory.getLogger(SudokuBoard.class);
-    private SudokuCell[][] board = new SudokuCell[BOARD_SIZE][BOARD_SIZE];
+    private final SudokuCell[][] board = new SudokuCell[BOARD_SIZE][BOARD_SIZE];
 
     public SudokuBoard(final int[][] dummyBoard) {
         initBoard(this.board, dummyBoard);
@@ -31,10 +31,6 @@ public final class SudokuBoard  {
         initBoard(boardCopy, this.board);
 
         return boardCopy;
-    }
-
-    public void setBoard(final SudokuCell[][] board) {
-        this.board = board;
     }
 
     public int getCellValue(final int rowIndex, final int colIndex) {

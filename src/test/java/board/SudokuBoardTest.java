@@ -49,6 +49,7 @@ class SudokuBoardTest {
     //trying to get a value outside the board index_range returns -1
     @Test void testGetCellValue(){
         assertEquals(-1, testBoard.getCellValue(-1,-1));
+        assertNotEquals(-1, testBoard.getCellValue(4,4));
         assertEquals(-1, testBoard.getCellValue(10,10));
     }
 
