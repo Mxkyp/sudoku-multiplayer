@@ -15,7 +15,8 @@ import static game.logic.SudokuDimensions.MIN_INDEX;
 import static game.logic.SudokuDimensions.MAX_INDEX;
 
 public final class SudokuBoard  {
-    private final Logger logger = LoggerFactory.getLogger(SudokuBoard.class);
+    private static final Logger logger =
+            LoggerFactory.getLogger(SudokuBoard.class);
     private final SudokuCell[][] board = new SudokuCell[BOARD_SIZE][BOARD_SIZE];
 
     public SudokuBoard(final int[][] dummyBoard) {

@@ -3,6 +3,7 @@ package board;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static game.logic.SudokuDimensions.SUB_BOARD_SIZE;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SudokuSubBoardTest {
@@ -25,12 +26,25 @@ class SudokuSubBoardTest {
 
     @Test void testInit(){
         SudokuCell[][] boardToReference = testBoard.getBoard();
+
+        //subboard should hold references, all changes in the original board should be present
         SudokuSubBoard sudokuSubBoard = new SudokuSubBoard(0, boardToReference);
 
         boardToReference[0][0].setValue(9);
+        for(int i = 0; i < SUB_BOARD_SIZE; i++) {
+            for (int j = 0; j < SUB_BOARD_SIZE; j++) {
+                assertEquals(boardToReference[i][j].getValue(), sudokuSubBoard.getCellValue(i, j));
+            }
+        }
 
-        assertEquals(sudokuSubBoard.);
-
+        SudokuSubBoard sudokuSubBoard2 = new SudokuSubBoard(1, boardToReference);
+        boardToReference[0][3].setValue(10);
+        for(int i = 0; i < SUB_BOARD_SIZE; i++) {
+            for (int j = 0; j < SUB_BOARD_SIZE; j++) {
+                assertEquals(boardToReference[i][3 + j].getValue(), sudokuSubBoard2.getCellValue(i, j));
+            }
+        }
     }
+
 
 }

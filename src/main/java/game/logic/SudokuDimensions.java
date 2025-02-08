@@ -20,4 +20,8 @@ public final class SudokuDimensions {
     // (each boards has 9 3x3 subBoards)
     public static final int SUB_BOARD_SIZE = 3;
 
+    public static final int SUB_MIN_INDEX = 0;
+
+    public static final int SUB_MAX_INDEX = 2;
+
 }

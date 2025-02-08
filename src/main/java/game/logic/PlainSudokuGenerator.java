@@ -9,7 +9,7 @@ import java.util.Random;
 
 import static game.logic.SudokuDimensions.BOARD_SIZE;
 import static game.logic.SudokuDimensions.MIN_INDEX;
-import static game.logic.SudokuDimensions.MAX_INDEX;
+import static game.logic.SudokuDimensions.SUB_MAX_INDEX;
 
 public final class PlainSudokuGenerator implements SudokuGenerator {
 
@@ -32,6 +32,6 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
     //MAX_INDEX + 1 because its exclusive
     private int getRandomIndex() {
         Random random = new Random();
-        return random.nextInt(MIN_INDEX, MAX_INDEX + 1);
+        return random.nextInt(MIN_INDEX, SUB_MAX_INDEX + 1);
     }
 }
