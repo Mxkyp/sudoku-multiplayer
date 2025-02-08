@@ -7,9 +7,9 @@ import board.SudokuCell;
 
 import java.util.Random;
 
-import static game.logic.SudokuDimensions.BOARD_SIZE;
-import static game.logic.SudokuDimensions.MIN_INDEX;
-import static game.logic.SudokuDimensions.SUB_MAX_INDEX;
+import static constans.Dimensions.BOARD_SIZE;
+import static constans.Dimensions.MIN_INDEX;
+import static constans.Dimensions.SUB_MAX_INDEX;
 
 public final class PlainSudokuGenerator implements SudokuGenerator {
 

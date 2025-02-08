@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 
 import java.awt.Point;
 
-import static game.logic.SudokuDimensions.SUB_MAX_INDEX;
-import static game.logic.SudokuDimensions.SUB_MIN_INDEX;
-import static game.logic.SudokuDimensions.SUB_BOARD_SIZE;
+import static constans.Dimensions.SUB_MAX_INDEX;
+import static constans.Dimensions.SUB_MIN_INDEX;
+import static constans.Dimensions.SUB_BOARD_SIZE;
 
 
 /***

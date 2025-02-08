@@ -10,9 +10,9 @@ import game.logic.SudokuGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static game.logic.SudokuDimensions.BOARD_SIZE;
-import static game.logic.SudokuDimensions.MIN_INDEX;
-import static game.logic.SudokuDimensions.MAX_INDEX;
+import static constans.Dimensions.BOARD_SIZE;
+import static constans.Dimensions.MIN_INDEX;
+import static constans.Dimensions.MAX_INDEX;
 
 public final class SudokuBoard  {
     private static final Logger logger =

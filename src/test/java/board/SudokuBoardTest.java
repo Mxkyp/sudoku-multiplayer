@@ -7,7 +7,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
-import static game.logic.SudokuDimensions.BOARD_SIZE;
+import static constans.Dimensions.BOARD_SIZE;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SudokuBoardTest {

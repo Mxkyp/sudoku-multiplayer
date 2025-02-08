@@ -4,7 +4,7 @@ import board.SudokuCell;
 
 import java.util.Arrays;
 
-public class SudokuColumn extends SudokuLine {
+public final class SudokuColumn extends SudokuLine {
 
     public SudokuColumn(final SudokuCell[][] board, final int columnX) {
         int rows = board.length;
@@ -17,6 +17,6 @@ public class SudokuColumn extends SudokuLine {
         super.setMembers(Arrays.asList(col));
     }
 
-    public returnColumnState()
+
 
 }

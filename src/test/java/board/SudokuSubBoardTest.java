@@ -3,7 +3,7 @@ package board;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static game.logic.SudokuDimensions.SUB_BOARD_SIZE;
+import static constans.Dimensions.SUB_BOARD_SIZE;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SudokuSubBoardTest {

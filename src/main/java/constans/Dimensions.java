@@ -1,8 +1,8 @@
-package game.logic;
+package constans;
 
-public final class SudokuDimensions {
+public final class Dimensions {
 
-    private SudokuDimensions() {
+    private Dimensions() {
         throw new UnsupportedOperationException("This is a utility class "
                 + "and cannot be instantiated");
     }
