@@ -1,3 +1,7 @@
+/***
+ * a class defining common methods and fields
+ * for rows and columns
+ */
 package lines;
 
 import board.SudokuCell;

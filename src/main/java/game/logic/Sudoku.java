@@ -1,3 +1,8 @@
+/***
+ * A utility class used to verify discrete parts of the SudokuGameBoard
+ * (subBoards, rows, and columns) against the rules of the game
+ * if for ex. a row has numbers from 1-9
+ */
 package game.logic;
 
 import board.SudokuCell;
@@ -5,6 +10,7 @@ import board.SudokuSubBoard;
 import lines.SudokuLine;
 
 public final class Sudoku {
+
   private Sudoku() {
     throw new UnsupportedOperationException("This is a utility class "
             + "and cannot be instantiated");
@@ -14,6 +20,24 @@ public final class Sudoku {
     WRONG,
     UNKNOWN,
     CORRECT;
+  }
+
+  private static final class MinMaxPair {
+    private final int max;
+    private final int min;
+
+    MinMaxPair(final int max, final int min) {
+      this.max = max;
+      this.min = min;
+    }
+
+    public int getMax() {
+      return max;
+    }
+
+    public int getMin() {
+      return min;
+    }
   }
 
   public static State verify(final SudokuSubBoard subBoard) {
@@ -27,24 +51,13 @@ public final class Sudoku {
       }
     }
 
-    int maxOccurence = 0;
-    int minOccurence = Integer.MAX_VALUE;
-
-    // starts from 1 because zero's
-    // (which occurence number is at index zero)
-    // represent empty cells
-    for (int i = 1; i < nrOfPossibleValues; i++) {
-      if (occurenceCount[i] > maxOccurence) {
-        maxOccurence = occurenceCount[i];
-      } else if (occurenceCount[i] < minOccurence) {
-        minOccurence = occurenceCount[i];
-      }
-    }
+    final MinMaxPair occurrence =
+            getMinMaxOccurences(occurenceCount, nrOfPossibleValues);
 
     State computedState;
-    if (maxOccurence > 1) {
+    if (occurrence.getMax() > 1) {
       computedState = State.WRONG;
-    } else if (maxOccurence != 1 || minOccurence != 1) {
+    } else if (occurrence.getMax() != 1 || occurrence.getMin() != 1) {
       computedState = State.UNKNOWN;
     } else {
       computedState = State.CORRECT;
@@ -52,7 +65,6 @@ public final class Sudoku {
 
     return computedState;
   }
-
 
   /***
    * returns whether the line is a valid
@@ -66,30 +78,41 @@ public final class Sudoku {
       occurenceCount[cell.getValue()]++;
     }
 
-    int maxOccurence = 0;
-    int minOccurence = Integer.MAX_VALUE;
-
-    // starts from 1 because zero's
-    // (which occurence number is at index zero)
-    // represent empty cells
-    for (int i = 1; i < nrOfPossibleValues; i++) {
-      if (occurenceCount[i] > maxOccurence) {
-        maxOccurence = occurenceCount[i];
-      } else if (occurenceCount[i] < minOccurence) {
-        minOccurence = occurenceCount[i];
-      }
-    }
+    final MinMaxPair occurrence =
+            getMinMaxOccurences(occurenceCount, nrOfPossibleValues);
 
     State computedState;
-    if (maxOccurence > 1) {
+    if (occurrence.getMax() > 1) {
       computedState = State.WRONG;
-    } else if (maxOccurence != 1 || minOccurence != 1) {
+    } else if (occurrence.getMax() != 1 || occurrence.getMin() != 1) {
       computedState = State.UNKNOWN;
     } else {
       computedState = State.CORRECT;
     }
 
     return computedState;
+
+  }
+
+  private static MinMaxPair getMinMaxOccurences(final int[] occurences,
+                                                final int nrOfPossibleValues) {
+    int max = 0;
+    int min = Integer.MAX_VALUE;
+
+    /*
+      starts from one
+      because the number stored at 0 index
+      is the number of cells unfilled
+     */
+    for (int i = 1; i < nrOfPossibleValues; i++) {
+      if (occurences[i] > max) {
+        max = occurences[i];
+      } else if (occurences[i] < min) {
+        min = occurences[i];
+      }
+    }
+
+    return new MinMaxPair(max, min);
   }
 
 }
