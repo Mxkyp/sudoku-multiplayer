@@ -32,7 +32,7 @@ class SudokuSubBoardTest {
     SudokuCell[][] boardToReference = testBoard.getBoard();
 
     //subboard should hold references, all changes in the original board should be present
-    SudokuSubBoard sudokuSubBoard = new SudokuSubBoard(0, boardToReference);
+    SudokuSubBoard sudokuSubBoard = new SudokuSubBoard(boardToReference, 0);
 
     boardToReference[0][0].setValue(9);
     for(int i = 0; i < SUB_BOARD_SIZE; i++) {
@@ -41,7 +41,7 @@ class SudokuSubBoardTest {
       }
     }
 
-    SudokuSubBoard sudokuSubBoard2 = new SudokuSubBoard(1, boardToReference);
+    SudokuSubBoard sudokuSubBoard2 = new SudokuSubBoard(boardToReference, 1);
     boardToReference[0][3].setValue(10);
     for(int i = 0; i < SUB_BOARD_SIZE; i++) {
       for (int j = 0; j < SUB_BOARD_SIZE; j++) {
@@ -53,7 +53,7 @@ class SudokuSubBoardTest {
 
   @Test void testGetBoard(){
     SudokuCell[][] boardToReference = testBoard.getBoard();
-    SudokuSubBoard sudokuSubBoard = new SudokuSubBoard(0, boardToReference);
+    SudokuSubBoard sudokuSubBoard = new SudokuSubBoard(boardToReference, 0);
 
     SudokuCell[][] subBoardCopy = sudokuSubBoard.getBoard();
 
@@ -72,7 +72,7 @@ class SudokuSubBoardTest {
 
   @Test void testPrintBoard(){
     SudokuCell[][] boardToReference = testBoard.getBoard();
-    SudokuSubBoard sudokuSubBoard = new SudokuSubBoard(0, boardToReference);
+    SudokuSubBoard sudokuSubBoard = new SudokuSubBoard(boardToReference, 0);
 
     //create an expectedRepresenation using stringBuilder
     final StringBuilder buffer = new StringBuilder();

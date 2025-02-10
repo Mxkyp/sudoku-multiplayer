@@ -8,6 +8,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import static constans.Dimensions.SUB_BOARD_SIZE;
 import static constans.Dimensions.SUB_MAX_INDEX;
@@ -46,6 +50,14 @@ public final class SudokuSubBoard extends Board {
 
   public SudokuCell[][] getBoard() {
     return super.getBoard(SUB_BOARD_SIZE, this.board);
+  }
+
+  public List<SudokuCell> getBoardAsList() {
+    List<SudokuCell> list = new ArrayList<>(SUB_BOARD_SIZE * SUB_BOARD_SIZE);
+    for (SudokuCell[] row: board) {
+      list.addAll(Arrays.asList(row));
+    }
+    return Collections.unmodifiableList(list);
   }
 
   public int getCellValue(final int rowIndex, final int colIndex) {

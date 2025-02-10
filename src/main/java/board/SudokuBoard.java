@@ -6,6 +6,7 @@
  * 3.nine columns
  */
 package board;
+import game.logic.Sudoku;
 import game.logic.SudokuGenerator;
 import lines.SudokuColumn;
 import lines.SudokuRow;
@@ -39,6 +40,35 @@ public final class SudokuBoard extends Board {
 
   }
 
+  public Sudoku.State verify() {
+    boolean unknownStatePresent = false;
+    Sudoku.State resultState = Sudoku.State.UNKNOWN;
+
+    for (int i = 0; i < BOARD_SIZE; i++) {
+
+      Sudoku.State rowState = Sudoku.verify(rows[i].getMembers());
+      Sudoku.State colState = Sudoku.verify(cols[i].getMembers());
+      Sudoku.State subBoardState = Sudoku.verify(subBoards[i].getBoardAsList());
+
+      if (rowState == Sudoku.State.WRONG
+          || colState == Sudoku.State.WRONG
+          || subBoardState == Sudoku.State.WRONG) {
+        resultState = Sudoku.State.WRONG;
+        break;
+      } else if (rowState == Sudoku.State.UNKNOWN
+                || colState == Sudoku.State.UNKNOWN
+                || subBoardState == Sudoku.State.UNKNOWN) {
+        unknownStatePresent = true;
+      }
+    }
+
+    if (!unknownStatePresent && resultState != Sudoku.State.WRONG) {
+      resultState = Sudoku.State.CORRECT;
+    }
+    return resultState;
+
+  }
+
   public SudokuCell[][] getBoard() {
     return super.getBoard(BOARD_SIZE, this.board);
   }
@@ -59,5 +89,7 @@ public final class SudokuBoard extends Board {
       }
     }
   }
+
+
 
 }

@@ -31,38 +31,38 @@ class SudokuTest {
   @Test void testVerifyColumn() {
     SudokuCell[][] sampleBoard = testBoard.getBoard();
     SudokuColumn col = new SudokuColumn(sampleBoard, 0);
-    assertEquals(Sudoku.State.UNKNOWN, Sudoku.verify(col));
+    assertEquals(Sudoku.State.UNKNOWN, Sudoku.verify(col.getMembers()));
 
     SudokuColumn col2 = new SudokuColumn(sampleBoard, 1);
-    assertEquals(Sudoku.State.CORRECT, Sudoku.verify(col2));
+    assertEquals(Sudoku.State.CORRECT, Sudoku.verify(col2.getMembers()));
 
     SudokuColumn col3 = new SudokuColumn(sampleBoard, 2);
-    assertEquals(Sudoku.State.WRONG, Sudoku.verify(col3));
+    assertEquals(Sudoku.State.WRONG, Sudoku.verify(col3.getMembers()));
   }
 
 
   @Test void testVerifyRow() {
     SudokuCell[][] sampleBoard = testBoard.getBoard();
     SudokuRow row = new SudokuRow(sampleBoard, 6);
-    assertEquals(Sudoku.State.UNKNOWN, Sudoku.verify(row));
+    assertEquals(Sudoku.State.UNKNOWN, Sudoku.verify(row.getMembers()));
 
     SudokuRow row2 = new SudokuRow(sampleBoard, 2);
-    assertEquals(Sudoku.State.CORRECT, Sudoku.verify(row2));
+    assertEquals(Sudoku.State.CORRECT, Sudoku.verify(row2.getMembers()));
 
     SudokuRow row3 = new SudokuRow(sampleBoard, 1);
-    assertEquals(Sudoku.State.WRONG, Sudoku.verify(row3));
+    assertEquals(Sudoku.State.WRONG, Sudoku.verify(row3.getMembers()));
   }
 
   @Test void testVerifySubBoard(){
     SudokuCell[][] sampleBoard = testBoard.getBoard();
 
-    SudokuSubBoard subBoard = new SudokuSubBoard(5,sampleBoard);
-    assertEquals(Sudoku.State.UNKNOWN, Sudoku.verify(subBoard));
+    SudokuSubBoard subBoard = new SudokuSubBoard(sampleBoard, 5);
+    assertEquals(Sudoku.State.UNKNOWN, Sudoku.verify(subBoard.getBoardAsList()));
 
-    SudokuSubBoard subBoard2 = new SudokuSubBoard(8,sampleBoard);
-    assertEquals(Sudoku.State.CORRECT, Sudoku.verify(subBoard2));
+    SudokuSubBoard subBoard2 = new SudokuSubBoard(sampleBoard, 8);
+    assertEquals(Sudoku.State.CORRECT, Sudoku.verify(subBoard2.getBoardAsList()));
 
-    SudokuSubBoard subBoard3 = new SudokuSubBoard(0,sampleBoard);
-    assertEquals(Sudoku.State.WRONG, Sudoku.verify(subBoard3));
+    SudokuSubBoard subBoard3 = new SudokuSubBoard(sampleBoard, 0);
+    assertEquals(Sudoku.State.WRONG, Sudoku.verify(subBoard3.getBoardAsList()));
   }
 }

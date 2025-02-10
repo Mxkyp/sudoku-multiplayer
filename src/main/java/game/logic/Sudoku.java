@@ -1,13 +1,13 @@
 /***
- * A utility class used to verify discrete parts of the SudokuGameBoard
- * (subBoards, rows, and columns) against the rules of the game
- * if for ex. a row has numbers from 1-9
+ * A utility class used to verify
+ * lists of SudokuCells against the rules of the game
+ * if for they have one of each number from 1-9 inclusive
  */
 package game.logic;
 
 import board.SudokuCell;
-import board.SudokuSubBoard;
-import lines.SudokuLine;
+
+import java.util.List;
 
 public final class Sudoku {
 
@@ -40,41 +40,15 @@ public final class Sudoku {
     }
   }
 
-  public static State verify(final SudokuSubBoard subBoard) {
-    final int nrOfPossibleValues = 10; //0 == unfilled, 1 to 9
-    int[] occurenceCount = new int[nrOfPossibleValues];
-    SudokuCell[][] board = subBoard.getBoard();
-
-    for (SudokuCell[] row: board) {
-      for (SudokuCell cell: row) {
-        occurenceCount[cell.getValue()]++;
-      }
-    }
-
-    final MinMaxPair occurrence =
-            getMinMaxOccurences(occurenceCount, nrOfPossibleValues);
-
-    State computedState;
-    if (occurrence.getMax() > 1) {
-      computedState = State.WRONG;
-    } else if (occurrence.getMax() != 1 || occurrence.getMin() != 1) {
-      computedState = State.UNKNOWN;
-    } else {
-      computedState = State.CORRECT;
-    }
-
-    return computedState;
-  }
-
   /***
-   * returns whether the line is a valid
+   * returns whether the list of elements is valid in terms of sudoku
    * (has only one of each digit from 1-9)
    */
-  public static State verify(final SudokuLine inputLine) {
+  public static State verify(final List<SudokuCell> members) {
     final int nrOfPossibleValues = 10; //0 == unfilled, 1 to 9
     int[] occurenceCount = new int[nrOfPossibleValues];
 
-    for (SudokuCell cell: inputLine.getMembers()) {
+    for (SudokuCell cell: members) {
       occurenceCount[cell.getValue()]++;
     }
 
