@@ -23,7 +23,7 @@ public final class SudokuSubBoard extends Board {
     private SudokuCell[][] board =
             new SudokuCell[SUB_BOARD_SIZE][SUB_BOARD_SIZE];
 
-   public SudokuSubBoard(final int subBoardIndex, final SudokuCell[][] board) {
+   public SudokuSubBoard(final SudokuCell[][] board, final int subBoardIndex) {
         Point startPoint = computeSubBoardCoords(subBoardIndex);
         for (int i = 0; i < SUB_BOARD_SIZE; i++) {
             for (int j = 0; j < SUB_BOARD_SIZE; j++) {
