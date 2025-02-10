@@ -37,8 +37,8 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
   @Override
   public SudokuBoard generateSudoku(final Difficulty difficulty) {
     int[][] board = new int[BOARD_SIZE][BOARD_SIZE];
-    Stack<Integer> inputed = new Stack<>();
     SudokuBoard sudokuBoard = new SudokuBoard(board);
+    final int magicNr = 10;
 
     while (sudokuBoard.verify() != Sudoku.State.CORRECT) {
       PairYX pair;
@@ -47,10 +47,17 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
         pair = new PairYX(getRandomIndex(), getRandomIndex());
       } while (board[pair.getY()][pair.getX()] != 0);
 
+      boolean[] values = new boolean[magicNr];
+      values[0] = true;
+
       do {
+        if (check(values)) {
+          sudokuBoard.setCell(pair.getY(), pair.getX(), 0);
+          break;
+        }
         int randomValue = getRandomValue();
+        values[randomValue] = true;
         sudokuBoard.setCell(pair.getY(), pair.getX(), randomValue);
-        sudokuBoard.printBoard();
       } while (sudokuBoard.verify() == Sudoku.State.WRONG);
 
     }
@@ -61,7 +68,14 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
     return 1;
   }
 
-
+  private boolean check(final boolean[] checked) {
+    for (boolean val: checked) {
+      if (!val) {
+        return false;
+      }
+    }
+    return true;
+  }
 
   //MAX_INDEX + 1 because its exclusive
   private int getRandomIndex() {
