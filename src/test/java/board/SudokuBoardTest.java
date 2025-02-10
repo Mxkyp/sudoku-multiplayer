@@ -84,6 +84,8 @@ class SudokuBoardTest {
         assertEquals(Sudoku.State.WRONG, new SudokuBoard(incorrectUnfilledBoard).verify());
     }
 
+
+
     //get shall return a hardcopy
     @Test void testGetBoard(){
         SudokuCell[][] boardCopy = testBoard.getBoard();

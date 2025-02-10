@@ -37,7 +37,6 @@ public final class SudokuBoard extends Board {
   }
 
   public SudokuBoard(final SudokuGenerator sudokuGenerator) {
-
   }
 
   public void setCell(final int y, final int x, final int value) {

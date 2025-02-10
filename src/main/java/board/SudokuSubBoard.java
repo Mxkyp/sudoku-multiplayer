@@ -57,6 +57,7 @@ public final class SudokuSubBoard extends Board {
     for (SudokuCell[] row: board) {
       list.addAll(Arrays.asList(row));
     }
+
     return Collections.unmodifiableList(list);
   }
 

@@ -14,6 +14,25 @@ import static constans.Dimensions.MIN_INDEX;
 import static constans.Dimensions.SUB_BOARD_SIZE;
 
 public final class PlainSudokuGenerator implements SudokuGenerator {
+  private final class PairYX {
+    private final int x;
+    private final int y;
+
+    PairYX(final int y, final int x) {
+      this.x = x;
+      this.y = y;
+    }
+
+    public int getX() {
+      return x;
+    }
+
+    public int getY() {
+      return y;
+    }
+
+  }
+
 
   @Override
   public SudokuBoard generateSudoku(final Difficulty difficulty) {
@@ -22,24 +41,26 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
     SudokuBoard sudokuBoard = new SudokuBoard(board);
 
     while (sudokuBoard.verify() != Sudoku.State.CORRECT) {
-      int y;
-      int x;
+      PairYX pair;
 
       do {
-        y = getRandomIndex();
-        x = getRandomIndex();
-      } while (board[y][x] != 0);
+        pair = new PairYX(getRandomIndex(), getRandomIndex());
+      } while (board[pair.getY()][pair.getX()] != 0);
 
-      int randomValue = getRandomValue();
-
+      do {
+        int randomValue = getRandomValue();
+        sudokuBoard.setCell(pair.getY(), pair.getX(), randomValue);
+        sudokuBoard.printBoard();
+      } while (sudokuBoard.verify() == Sudoku.State.WRONG);
 
     }
-    return null;
+    return sudokuBoard;
   }
 
   private int seperateIntoSubGrids() {
     return 1;
   }
+
 
 
   //MAX_INDEX + 1 because its exclusive
