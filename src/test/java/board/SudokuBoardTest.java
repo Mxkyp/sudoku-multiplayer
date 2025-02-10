@@ -51,6 +51,9 @@ class SudokuBoardTest {
         assertEquals(-1, testBoard.getCellValue(-1,-1));
         assertNotEquals(-1, testBoard.getCellValue(4,4));
         assertEquals(-1, testBoard.getCellValue(10,10));
+        assertEquals(-1, testBoard.getCellValue(-1,4));
+        assertEquals(-1, testBoard.getCellValue(4,-1));
+        assertNotEquals(-1, testBoard.getCellValue(0,-0));
     }
 
     @Test void testPrintBoard(){

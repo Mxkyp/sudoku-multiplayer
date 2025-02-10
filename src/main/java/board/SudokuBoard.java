@@ -39,6 +39,7 @@ public final class SudokuBoard extends Board {
   public void printBoard() {
     super.printBoard(this.board);
   }
+
   private void initBoard(final SudokuCell[][] boardToInit,
                          final int[][] values)            {
     for (int i = 0; i < BOARD_SIZE; i++) {
