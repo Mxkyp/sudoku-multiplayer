@@ -40,6 +40,10 @@ public final class SudokuBoard extends Board {
 
   }
 
+  public void setCell(final int y, final int x, final int value) {
+    this.board[y][x].setValue(value);
+  }
+
   public Sudoku.State verify() {
     boolean unknownStatePresent = false;
     Sudoku.State resultState = Sudoku.State.UNKNOWN;
