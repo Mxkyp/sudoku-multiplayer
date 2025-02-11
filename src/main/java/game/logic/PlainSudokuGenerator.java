@@ -31,6 +31,19 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
       return y;
     }
 
+    @Override
+    public boolean equals(final Object obj) {
+      boolean result = false;
+      if (obj == null)  {
+          throw new NullPointerException();
+      } else if (obj.getClass() == this.getClass()) {
+        PairYX other = (PairYX) obj;
+        if (other.getY() == this.getY() && other.getX() == this.getX()) {
+          result = true;
+        }
+      }
+      return result;
+    }
   }
 
 
@@ -38,30 +51,37 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
   public SudokuBoard generateSudoku(final Difficulty difficulty) {
     int[][] board = new int[BOARD_SIZE][BOARD_SIZE];
     SudokuBoard sudokuBoard = new SudokuBoard(board);
-    final int magicNr = 10;
+    Stack<PairYX> pointsBlocked = new Stack<>();
 
     while (sudokuBoard.verify() != Sudoku.State.CORRECT) {
       PairYX pair;
 
       do {
         pair = new PairYX(getRandomIndex(), getRandomIndex());
-      } while (board[pair.getY()][pair.getX()] != 0);
-
-      boolean[] values = new boolean[magicNr];
-      values[0] = true;
-
-      do {
-        if (check(values)) {
-          sudokuBoard.setCell(pair.getY(), pair.getX(), 0);
-          break;
-        }
-        int randomValue = getRandomValue();
-        values[randomValue] = true;
-        sudokuBoard.setCell(pair.getY(), pair.getX(), randomValue);
-      } while (sudokuBoard.verify() == Sudoku.State.WRONG);
+      } while (sudokuBoard.getCellValue(pair.getY(), pair.getX()) != 0);
 
     }
     return sudokuBoard;
+  }
+
+  private boolean tryACell(final PairYX pair, final SudokuBoard sudokuBoard) {
+    final int magicNr = 10;
+    boolean[] values = new boolean[magicNr];
+    values[0] = true;
+    boolean result = true;
+
+    do {
+      if (check(values)) {
+        sudokuBoard.setCell(pair.getY(), pair.getX(), 0);
+        result = false;
+      }
+
+      int randomValue = getRandomValue();
+      values[randomValue] = true;
+      sudokuBoard.setCell(pair.getY(), pair.getX(), randomValue);
+    } while (sudokuBoard.verify() == Sudoku.State.WRONG);
+
+    return result;
   }
 
   private int seperateIntoSubGrids() {
