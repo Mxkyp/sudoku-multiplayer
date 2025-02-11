@@ -23,6 +23,11 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
       this.y = y;
     }
 
+    PairYX(final PairYX toCopy) {
+      this.x = toCopy.getX();
+      this.y = toCopy.getY();
+    }
+
     public int getX() {
       return x;
     }
@@ -44,6 +49,8 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
       }
       return result;
     }
+
+
   }
 
 
@@ -52,19 +59,35 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
     int[][] board = new int[BOARD_SIZE][BOARD_SIZE];
     SudokuBoard sudokuBoard = new SudokuBoard(board);
     Stack<PairYX> pointsBlocked = new Stack<>();
+    Stack<PairYX> roadTaken = new Stack<>();
+    boolean deadEnd = false;
 
     while (sudokuBoard.verify() != Sudoku.State.CORRECT) {
       PairYX pair;
 
       do {
         pair = new PairYX(getRandomIndex(), getRandomIndex());
-      } while (sudokuBoard.getCellValue(pair.getY(), pair.getX()) != 0);
+      } while (sudokuBoard.getCellValue(pair.getY(), pair.getX()) != 0
+              || pointsBlocked.contains(pair));
 
+      if (!foundASolution(pair, sudokuBoard)) {
+        pointsBlocked.push(new PairYX(pair));
+      }
+
+      else if (!pointsBlocked.isEmpty()) {
+        pointsBlocked.pop();
+        deadEnd = false;
+      } else if (!deadEnd) {
+        roadTaken.push(new PairYX(pair));
+      }
+
+      sudokuBoard.printBoard();
     }
     return sudokuBoard;
   }
 
-  private boolean tryACell(final PairYX pair, final SudokuBoard sudokuBoard) {
+  private boolean foundASolution(final PairYX pair,
+                                 final SudokuBoard sudokuBoard) {
     final int magicNr = 10;
     boolean[] values = new boolean[magicNr];
     values[0] = true;
