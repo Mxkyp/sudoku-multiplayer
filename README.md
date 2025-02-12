@@ -9,3 +9,4 @@
 4. maven-pmd
 5. slf4j
 6. logback
+7. commons-lang3
