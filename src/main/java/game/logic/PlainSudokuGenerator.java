@@ -4,33 +4,17 @@
 package game.logic;
 
 import board.SudokuBoard;
-import board.SudokuCell;
 
 import java.awt.Point;
 import java.util.Random;
 
-import static constans.Dimensions.BOARD_SIZE;
-import static constans.Dimensions.SUB_BOARD_SIZE;
-
+import static constans.Dimensions.*;
+//TODO:a LOT of refactoring and reStructuring
 public final class PlainSudokuGenerator implements SudokuGenerator {
 
-  @SuppressWarnings("checkstyle:MagicNumber")
   @Override
   public SudokuBoard generateSudoku(final Difficulty difficulty) {
     int[][] mockBoard = new int[BOARD_SIZE][BOARD_SIZE];
-    int[][] array = {
-            {7, 0, 2, 0, 5, 0, 6, 0, 0},
-            {0, 0, 0, 0, 0, 3, 0, 0, 0},
-            {1, 0, 0, 0, 0, 9, 5, 0, 0},
-
-            {8, 0, 0, 0, 0, 0, 0, 9, 0},
-            {0, 4, 3, 0, 0, 0, 7, 5, 0},
-            {0, 9, 0, 0, 0, 0, 0, 0, 8},
-
-            {0, 0, 9, 7, 0, 0, 0, 0, 5},
-            {0, 0, 0, 2, 0, 0, 0, 0, 0},
-            {0, 0, 7, 0, 4, 0, 2, 0, 3}
-    };
     solveBoard(mockBoard);
     return new SudokuBoard(mockBoard);
   }
@@ -38,13 +22,19 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
   private static boolean solveBoard(final int[][] board) {
     for (int row = 0; row < BOARD_SIZE; row++) {
       for (int column = 0; column < BOARD_SIZE; column++) {
+        //cell is unfilled
         if (board[row][column] == 0) {
           boolean[] triedVal = new boolean[BOARD_SIZE + 1];
           triedVal[0] = true;
           int valueToTry;
 
+          //try filling it with random numbers
           while ((valueToTry = getRandomValue(triedVal)) != -1) {
+
+            //record which one you tried
             triedVal[valueToTry] = true;
+
+            //check if it breaks the board
             if (verifyPlacement(board, row, column, valueToTry)) {
               board[row][column] = valueToTry;
 
@@ -62,26 +52,6 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
     return true;
   }
 
-  private static boolean verifyPlacement(final int[][] board,
-                                         final int row, final int col,
-                                         final int value) {
-    return !rowContainsValue(board, row, value)
-            && !colContainsValue(board, col, value)
-            && !subBoardContains(board, row / SUB_BOARD_SIZE * SUB_BOARD_SIZE + col / SUB_BOARD_SIZE, value);
-  }
-
-  private static boolean rowContainsValue(final int[][] board,
-                                          final int row,
-                                          final int value) {
-
-    for (int c = 0; c < BOARD_SIZE; c++) {
-      if (board[row][c] == value) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   private static int getRandomValue(final boolean[] triedValue) {
     if (triedAll(triedValue)) {
       return -1;
@@ -97,6 +67,14 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
     return digit;
   }
 
+  private static boolean verifyPlacement(final int[][] board,
+                                         final int row, final int col,
+                                         final int value) {
+    return !rowContainsValue(board, row, value)
+            && !colContainsValue(board, col, value)
+            && !subBoardContains(board, row / SUB_BOARD_SIZE * SUB_BOARD_SIZE + col / SUB_BOARD_SIZE, value);
+  }
+
   private static boolean triedAll(final boolean[] triedValue) {
     for (boolean tried: triedValue) {
       if (!tried) {
@@ -105,6 +83,19 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
     }
     return true;
   }
+
+  private static boolean rowContainsValue(final int[][] board,
+                                          final int row,
+                                          final int value) {
+
+    for (int c = 0; c < BOARD_SIZE; c++) {
+      if (board[row][c] == value) {
+        return true;
+      }
+    }
+    return false;
+  }
+
 
   private static boolean colContainsValue(final int[][] board,
                                           final int column,
