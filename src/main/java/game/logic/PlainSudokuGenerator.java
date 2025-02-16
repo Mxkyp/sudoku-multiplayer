@@ -6,6 +6,7 @@ package game.logic;
 import board.SudokuBoard;
 
 import java.awt.Point;
+import java.util.Arrays;
 import java.util.Random;
 
 import static constans.Dimensions.*;
@@ -29,8 +30,25 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
             {0, 0, 0, 2, 0, 0, 0, 0, 0},
             {0, 0, 7, 0, 4, 0, 2, 0, 3}
     };
+
+    int[][] array2 = {
+            {0, 3, 2, 0, 5, 0, 6, 1, 9},
+            {9, 0, 6, 0, 7, 3, 0, 0, 0},
+            {0, 8, 0, 6, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 4, 3, 0, 2},
+            {6, 0, 0, 0, 0, 0, 0, 5, 1},
+            {2, 0, 5, 0, 1, 0, 4, 0, 8},
+            {0, 0, 0, 7, 8, 0, 1, 0, 0},
+            {0, 0, 8, 0, 0, 0, 0, 0, 0},
+            {0, 0, 7, 9, 0, 1, 0, 8, 3}
+    };
+
     solveBoard(array);
-    return new SudokuBoard(array);
+    for (int i = 0; i < 64; i++){
+      unsolveBoard(array);
+    }
+    solveBoard(array2);
+    return new SudokuBoard(array2);
   }
 
   private static boolean solveBoard(final int[][] board) {
@@ -43,6 +61,27 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
       }
     }
     return true;
+  }
+
+  private static void unsolveBoard(final int[][] board) {
+    int row;
+    int col;
+    Random rand = new Random();
+    int[][] dummyBoard = new int[BOARD_SIZE][BOARD_SIZE];
+    do {
+      row = rand.nextInt(0, BOARD_SIZE);
+      col = rand.nextInt(0, BOARD_SIZE);
+
+      for (int i = 0; i < BOARD_SIZE; i++) {
+        for (int j = 0; j < BOARD_SIZE; j++) {
+          dummyBoard[i][j] = board[i][j];
+        }
+      }
+      dummyBoard[row][col] = 0;
+      solveBoard(dummyBoard);
+    } while (Arrays.equals(dummyBoard, board));
+
+    board[row][col] = 0;
   }
 
   private static boolean tryFillingCell(final int[][] board,
