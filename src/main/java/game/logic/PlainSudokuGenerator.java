@@ -7,6 +7,7 @@ import board.SudokuBoard;
 import board.SudokuCell;
 
 import java.awt.Point;
+import java.util.Random;
 
 import static constans.Dimensions.BOARD_SIZE;
 import static constans.Dimensions.SUB_BOARD_SIZE;
@@ -30,17 +31,22 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
             {0, 0, 0, 2, 0, 0, 0, 0, 0},
             {0, 0, 7, 0, 4, 0, 2, 0, 3}
     };
-    solveBoard(array);
-    return new SudokuBoard(array);
+    solveBoard(mockBoard);
+    return new SudokuBoard(mockBoard);
   }
 
   private static boolean solveBoard(final int[][] board) {
     for (int row = 0; row < BOARD_SIZE; row++) {
       for (int column = 0; column < BOARD_SIZE; column++) {
         if (board[row][column] == 0) {
-          for (int i = 1; i <= BOARD_SIZE; i++) {
-            if (verifyPlacement(board, row, column, i)) {
-              board[row][column] = i;
+          boolean[] triedVal = new boolean[BOARD_SIZE + 1];
+          triedVal[0] = true;
+          int valueToTry;
+
+          while ((valueToTry = getRandomValue(triedVal)) != -1) {
+            triedVal[valueToTry] = true;
+            if (verifyPlacement(board, row, column, valueToTry)) {
+              board[row][column] = valueToTry;
 
               if (solveBoard(board)) {
                 return true;
@@ -74,6 +80,30 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
       }
     }
     return false;
+  }
+
+  private static int getRandomValue(final boolean[] triedValue) {
+    if (triedAll(triedValue)) {
+      return -1;
+    }
+
+    Random rand = new Random();
+    int digit = 0;
+
+    do {
+      digit = rand.nextInt(1, BOARD_SIZE + 1);
+    } while (triedValue[digit]);
+
+    return digit;
+  }
+
+  private static boolean triedAll(final boolean[] triedValue) {
+    for (boolean tried: triedValue) {
+      if (!tried) {
+        return false;
+      }
+    }
+    return true;
   }
 
   private static boolean colContainsValue(final int[][] board,
