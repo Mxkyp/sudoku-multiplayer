@@ -4,136 +4,116 @@
 package game.logic;
 
 import board.SudokuBoard;
+import board.SudokuCell;
 
-import java.util.Random;
-import java.util.Stack;
+import java.awt.Point;
 
-import static constans.Dimensions.MAX_INDEX;
 import static constans.Dimensions.BOARD_SIZE;
-import static constans.Dimensions.MIN_INDEX;
 import static constans.Dimensions.SUB_BOARD_SIZE;
 
 public final class PlainSudokuGenerator implements SudokuGenerator {
-  private final class PairYX {
-    private final int x;
-    private final int y;
 
-    PairYX(final int y, final int x) {
-      this.x = x;
-      this.y = y;
-    }
-
-    PairYX(final PairYX toCopy) {
-      this.x = toCopy.getX();
-      this.y = toCopy.getY();
-    }
-
-    public int getX() {
-      return x;
-    }
-
-    public int getY() {
-      return y;
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-      boolean result = false;
-      if (obj == null)  {
-          throw new NullPointerException();
-      } else if (obj.getClass() == this.getClass()) {
-        PairYX other = (PairYX) obj;
-        if (other.getY() == this.getY() && other.getX() == this.getX()) {
-          result = true;
-        }
-      }
-      return result;
-    }
-
-
-  }
-
-
+  @SuppressWarnings("checkstyle:MagicNumber")
   @Override
   public SudokuBoard generateSudoku(final Difficulty difficulty) {
-    int[][] board = new int[BOARD_SIZE][BOARD_SIZE];
-    SudokuBoard sudokuBoard = new SudokuBoard(board);
-    Stack<PairYX> pointsBlocked = new Stack<>();
-    Stack<PairYX> roadTaken = new Stack<>();
-    boolean deadEnd = false;
+    int[][] mockBoard = new int[BOARD_SIZE][BOARD_SIZE];
+    int[][] array = {
+            {7, 0, 2, 0, 5, 0, 6, 0, 0},
+            {0, 0, 0, 0, 0, 3, 0, 0, 0},
+            {1, 0, 0, 0, 0, 9, 5, 0, 0},
 
-    while (sudokuBoard.verify() != Sudoku.State.CORRECT) {
-      PairYX pair;
+            {8, 0, 0, 0, 0, 0, 0, 9, 0},
+            {0, 4, 3, 0, 0, 0, 7, 5, 0},
+            {0, 9, 0, 0, 0, 0, 0, 0, 8},
 
-      do {
-        pair = new PairYX(getRandomIndex(), getRandomIndex());
-      } while (sudokuBoard.getCellValue(pair.getY(), pair.getX()) != 0
-              || pointsBlocked.contains(pair));
-
-      if (!foundASolution(pair, sudokuBoard)) {
-        pointsBlocked.push(new PairYX(pair));
-      }
-
-      else if (!pointsBlocked.isEmpty()) {
-        pointsBlocked.pop();
-        deadEnd = false;
-      } else if (!deadEnd) {
-        roadTaken.push(new PairYX(pair));
-      }
-
-      sudokuBoard.printBoard();
-    }
-    return sudokuBoard;
+            {0, 0, 9, 7, 0, 0, 0, 0, 5},
+            {0, 0, 0, 2, 0, 0, 0, 0, 0},
+            {0, 0, 7, 0, 4, 0, 2, 0, 3}
+    };
+    solveBoard(array);
+    return new SudokuBoard(array);
   }
 
-  private boolean foundASolution(final PairYX pair,
-                                 final SudokuBoard sudokuBoard) {
-    final int magicNr = 10;
-    boolean[] values = new boolean[magicNr];
-    values[0] = true;
-    boolean result = true;
+  private static boolean solveBoard(final int[][] board) {
+    for (int row = 0; row < BOARD_SIZE; row++) {
+      for (int column = 0; column < BOARD_SIZE; column++) {
+        if (board[row][column] == 0) {
+          for (int i = 1; i <= BOARD_SIZE; i++) {
+            if (verifyPlacement(board, row, column, i)) {
+              board[row][column] = i;
 
-    do {
-      if (check(values)) {
-        sudokuBoard.setCell(pair.getY(), pair.getX(), 0);
-        result = false;
-      }
-
-      int randomValue = getRandomValue();
-      values[randomValue] = true;
-      sudokuBoard.setCell(pair.getY(), pair.getX(), randomValue);
-    } while (sudokuBoard.verify() == Sudoku.State.WRONG);
-
-    return result;
-  }
-
-  private int seperateIntoSubGrids() {
-    return 1;
-  }
-
-  private boolean check(final boolean[] checked) {
-    for (boolean val: checked) {
-      if (!val) {
-        return false;
+              if (solveBoard(board)) {
+                return true;
+              } else {
+                board[row][column] = 0;
+              }
+            }
+          }
+          return false;
+        }
       }
     }
     return true;
   }
 
-  //MAX_INDEX + 1 because its exclusive
-  private int getRandomIndex() {
-    Random random = new Random();
-    return random.nextInt(MIN_INDEX, MAX_INDEX + 1);
+  private static boolean verifyPlacement(final int[][] board,
+                                         final int row, final int col,
+                                         final int value) {
+    return !rowContainsValue(board, row, value)
+            && !colContainsValue(board, col, value)
+            && !subBoardContains(board, row / SUB_BOARD_SIZE * SUB_BOARD_SIZE + col / SUB_BOARD_SIZE, value);
   }
 
-  private int getRandomValue() {
-    final int min = 1;
-    final int maxExclusive = 10;
-    Random random = new Random();
-    return random.nextInt(min, maxExclusive);
+  private static boolean rowContainsValue(final int[][] board,
+                                          final int row,
+                                          final int value) {
+
+    for (int c = 0; c < BOARD_SIZE; c++) {
+      if (board[row][c] == value) {
+        return true;
+      }
+    }
+    return false;
   }
 
-  private int determineSubBoardIndex(final int y, final int x) {
-    return SUB_BOARD_SIZE * (y / SUB_BOARD_SIZE) + (x / SUB_BOARD_SIZE);
+  private static boolean colContainsValue(final int[][] board,
+                                          final int column,
+                                          final int value) {
+    for (int r = 0; r < BOARD_SIZE; r++) {
+      if (board[r][column] == value) {
+        return true;
+      }
+    }
+    return false;
   }
+
+  private static boolean subBoardContains(final int[][] board,
+                                          final int index,
+                                          final int value) {
+
+    Point startPoint = computeSubBoardCoords(index);
+    for (int i = 0; i < SUB_BOARD_SIZE; i++) {
+      for (int j = 0; j < SUB_BOARD_SIZE; j++) {
+        if (board[startPoint.y + i][startPoint.x + j] == value) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  /*
+   compute the left upper corner coordinates for each subBoard
+   */
+  private static Point computeSubBoardCoords(final int subBoardIndex) {
+    final int[] subBoardLeftCornerRowNr = {0, 3, 6};
+    final int[] subBoardLeftCornerColNr = {0, 3, 6};
+
+    return new Point(subBoardLeftCornerColNr[subBoardIndex % SUB_BOARD_SIZE],
+            subBoardLeftCornerRowNr[subBoardIndex / SUB_BOARD_SIZE]);
+  }
+
+
+
+
 }
