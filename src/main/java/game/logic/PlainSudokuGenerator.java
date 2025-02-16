@@ -38,7 +38,7 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
       for (int column = 0; column < BOARD_SIZE; column++) {
         //cell is unfilled
         if (board[row][column] == 0) {
-          tryFillingCell(board, row, column);
+          return tryFillingCell(board, row, column);
         }
       }
     }
