@@ -1,8 +1,11 @@
 package main;
 
 import javafx.application.Application;
+import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.scene.paint.Color;
 
 public class Main extends Application {
 
@@ -12,7 +15,14 @@ public class Main extends Application {
 
   @Override
   public void start(Stage stage) throws Exception {
-    Scene scene = new Scene();
+    Group root = new Group();
+    Scene scene = new Scene(root, Color.BISQUE);
+
+    Image icon = new Image(getClass().getResource("/images/sudoku.png").toExternalForm());
+    stage.getIcons().add(icon);
+
+    stage.setTitle(" Sudoku Multiplayer");
+    stage.setScene(scene);
     stage.show();
   }
 }
