@@ -31,24 +31,11 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
             {0, 0, 7, 0, 4, 0, 2, 0, 3}
     };
 
-    int[][] array2 = {
-            {0, 3, 2, 0, 5, 0, 6, 1, 9},
-            {9, 0, 6, 0, 7, 3, 0, 0, 0},
-            {0, 8, 0, 6, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 4, 3, 0, 2},
-            {6, 0, 0, 0, 0, 0, 0, 5, 1},
-            {2, 0, 5, 0, 1, 0, 4, 0, 8},
-            {0, 0, 0, 7, 8, 0, 1, 0, 0},
-            {0, 0, 8, 0, 0, 0, 0, 0, 0},
-            {0, 0, 7, 9, 0, 1, 0, 8, 3}
-    };
-
     solveBoard(array);
     for (int i = 0; i < 64; i++){
-      unsolveBoard(array);
+      unsolveBoard(array, Arrays.copyOf(array, BOARD_SIZE * BOARD_SIZE));
     }
-    solveBoard(array2);
-    return new SudokuBoard(array2);
+    return new SudokuBoard(array);
   }
 
   private static boolean solveBoard(final int[][] board) {
@@ -63,26 +50,45 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
     return true;
   }
 
-  private static void unsolveBoard(final int[][] board) {
+  private static boolean unsolveBoard(final int[][] board, final int[][] originalBoard) {
     int row;
     int col;
     Random rand = new Random();
     int[][] dummyBoard = new int[BOARD_SIZE][BOARD_SIZE];
-    do {
+
       row = rand.nextInt(0, BOARD_SIZE);
       col = rand.nextInt(0, BOARD_SIZE);
 
-      for (int i = 0; i < BOARD_SIZE; i++) {
-        for (int j = 0; j < BOARD_SIZE; j++) {
-          dummyBoard[i][j] = board[i][j];
+    for (int i = 0; i < BOARD_SIZE; i++) {
+      System.arraycopy(board[i], 0, dummyBoard[i], 0, BOARD_SIZE);
+    }
+
+    dummyBoard[row][col] = 0;
+    solveBoard(dummyBoard);
+    SudokuBoard board2 = new SudokuBoard(dummyBoard);
+    SudokuBoard board3 = new SudokuBoard(board);
+    System.out.print(compareArrays(dummyBoard, board));
+    if (compareArrays(originalBoard, dummyBoard)) {
+      board[row][col] = 0;
+      return unsolveBoard(board, dummyBoard);
+    } else {
+      return false;
+    }
+  }
+
+  private static boolean compareArrays(final int[][] copy,
+                                       final int[][] original) {
+      for (int i = 0; i < original.length; i++) {
+        for (int j = 0; j < original[0].length; j++) {
+          if (copy[i][j] != original[i][j]) {
+            System.out.println("\n" + i + " row" + j + " col" + "\n");
+            return false;
+          }
         }
       }
-      dummyBoard[row][col] = 0;
-      solveBoard(dummyBoard);
-    } while (Arrays.equals(dummyBoard, board));
-
-    board[row][col] = 0;
+      return true;
   }
+
 
   private static boolean tryFillingCell(final int[][] board,
                                         final int row, final int col) {
