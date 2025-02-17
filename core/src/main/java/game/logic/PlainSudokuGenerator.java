@@ -56,8 +56,9 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
     Random rand = new Random();
     int[][] dummyBoard = new int[BOARD_SIZE][BOARD_SIZE];
 
-      row = rand.nextInt(0, BOARD_SIZE);
-      col = rand.nextInt(0, BOARD_SIZE);
+    row = rand.nextInt(0, BOARD_SIZE);
+    col = rand.nextInt(0, BOARD_SIZE);
+
 
     for (int i = 0; i < BOARD_SIZE; i++) {
       System.arraycopy(board[i], 0, dummyBoard[i], 0, BOARD_SIZE);
@@ -65,9 +66,6 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
 
     dummyBoard[row][col] = 0;
     solveBoard(dummyBoard);
-    SudokuBoard board2 = new SudokuBoard(dummyBoard);
-    SudokuBoard board3 = new SudokuBoard(board);
-    System.out.print(compareArrays(dummyBoard, board));
     if (compareArrays(originalBoard, dummyBoard)) {
       board[row][col] = 0;
       return unsolveBoard(board, dummyBoard);
@@ -81,7 +79,6 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
       for (int i = 0; i < original.length; i++) {
         for (int j = 0; j < original[0].length; j++) {
           if (copy[i][j] != original[i][j]) {
-            System.out.println("\n" + i + " row" + j + " col" + "\n");
             return false;
           }
         }

@@ -14,6 +14,8 @@ public class PlainSudokuGeneratorTest {
         PlainSudokuGenerator sudokuGenerator = new PlainSudokuGenerator();
         SudokuBoard boardy = sudokuGenerator.generateSudoku(SudokuGenerator.Difficulty.EASY);
         boardy.printBoard();
+
+
     }
 
 }
