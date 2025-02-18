@@ -11,16 +11,15 @@ import javafx.scene.paint.Color;
 public final class Main extends Application {
   private int W_HEIGHT = 600;
   private int W_WIDTH = 720;
+
   public static void main(final String[] args) {
     launch(args);
   }
 
   @Override
   public void start(Stage stage) throws Exception {
-    //System.out.print(getClass().getResource("/fxml/main.fxml"));
     Parent root = FXMLLoader.load(getClass().getResource("/fxml/main.fxml"));
-    //Group root = new Group();
-    Scene scene = new Scene(root, W_WIDTH, W_HEIGHT, Color.BISQUE);
+    Scene scene = new Scene(root, Color.BISQUE);
 
     Image icon = new Image(getClass().getResource("/images/sudoku.png").toExternalForm());
     stage.getIcons().add(icon);
