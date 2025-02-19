@@ -1,5 +1,10 @@
 package main;
 
+import board.SudokuBoard;
+import game.logic.PlainSudokuGenerator;
+import game.logic.SudokuGenerator;
+import javafx.beans.property.adapter.JavaBeanStringProperty;
+import javafx.beans.property.adapter.JavaBeanStringPropertyBuilder;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -29,12 +34,18 @@ public final class GameController implements Initializable {
   private Scene scene;
   private Parent root;
 
-  /* sudokuBoard and indivdual cell
-    text fields
+  /*
+    sudokuBoard and individual cell
+    text fields gui representation
    */
   @FXML
   public GridPane sudokuPane;
   public Text[][] textNode = new Text[BOARD_SIZE][BOARD_SIZE];
+
+  /*
+
+   */
+  private SudokuBoard sudokuBoard = new PlainSudokuGenerator().generateSudoku(SudokuGenerator.Difficulty.EASY);
 
   public void switchToMainMenu(final MouseEvent e) throws IOException {
     Parent root = FXMLLoader.load(getClass().getResource("/fxml/main.fxml"));
@@ -52,6 +63,12 @@ public final class GameController implements Initializable {
     String id = temp.getId();
     int colNr = id.charAt(colIndex) - '0'; // good old C tricks
     int rowNr = id.charAt(rowIndex) - '0';
+
+    int number = Integer.parseInt(temp.getText());
+    final int newNumber = (++number) % (BOARD_SIZE + 1);
+
+    sudokuBoard.setCell(rowNr, colNr, newNumber);
+    textNode[rowNr][colNr].setText(Integer.toString(newNumber));
     logger.debug("Clicked Cell {} {}", colNr, rowNr);
   }
 
@@ -73,7 +90,7 @@ public final class GameController implements Initializable {
   private void setTextNode(final int row, final int col) {
     final double wWidth = 50.0;
     final int fontSize = 24;
-    textNode[row][col] = new Text(Integer.toString(0));
+    textNode[row][col] = new Text(Integer.toString(sudokuBoard.getCell(row, col)));
     textNode[row][col].setWrappingWidth(wWidth);
     textNode[row][col].minHeight(wWidth);
     textNode[row][col].setFont(Font.font("DejaVu Sans ExtraLight", fontSize));
@@ -81,4 +98,5 @@ public final class GameController implements Initializable {
     textNode[row][col].setId("r" + row + "c" + col);
     textNode[row][col].setOnMouseClicked(this::clickCell);
   }
+
 }
