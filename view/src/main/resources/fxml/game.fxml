@@ -8,12 +8,11 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.shape.Line?>
 
 <AnchorPane prefHeight="600.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.GameController">
    <children>
-      <GridPane fx:id="sudokuPane" gridLinesVisible="true" layoutX="135.0" layoutY="75.0">
+      <GridPane fx:id="sudokuPane" gridLinesVisible="true" layoutX="135.0" layoutY="75.0" opacity="0.8">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="50.0" minWidth="10.0" prefWidth="50.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="50.0" minWidth="10.0" prefWidth="50.0" />
@@ -48,5 +47,9 @@
             <Glow />
          </effect>
       </ImageView>
+      <Line endX="458.00006103515625" endY="-1.52587890625E-5" layoutX="127.0" layoutY="225.0" startX="7.9999847412109375" startY="-1.52587890625E-5" stroke="#4e4d4d" strokeWidth="2.0" />
+      <Line endX="99.99996948242188" endY="59.99999237060547" layoutX="184.0" layoutY="15.0" startX="99.99996948242188" startY="510.0" stroke="#4e4d4d" strokeWidth="2.0" />
+      <Line endX="99.99996948242188" endY="119.99999237060547" layoutX="335.0" layoutY="-45.0" startX="99.99996948242188" startY="570.0" stroke="#4e4d4d" strokeWidth="2.0" />
+      <Line endX="534.0000610351562" endY="-3.0517578125E-5" layoutX="51.0" layoutY="374.0" startX="83.99998474121094" startY="-3.0517578125E-5" stroke="#4e4d4d" strokeWidth="2.0" />
    </children>
 </AnchorPane>
