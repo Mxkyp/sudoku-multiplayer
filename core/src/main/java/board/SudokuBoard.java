@@ -39,9 +39,6 @@ public final class SudokuBoard extends Board {
   public SudokuBoard(final SudokuGenerator sudokuGenerator) {
   }
 
-  public int getCell(final int y, final int x) {
-    return this.board[y][x].getValue();
-  }
   public void setCell(final int y, final int x, final int value) {
     this.board[y][x].setValue(value);
   }

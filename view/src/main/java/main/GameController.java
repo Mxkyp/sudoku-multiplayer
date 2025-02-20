@@ -3,8 +3,10 @@ package main;
 import board.SudokuBoard;
 import game.logic.PlainSudokuGenerator;
 import game.logic.SudokuGenerator;
-import javafx.beans.property.adapter.JavaBeanStringProperty;
-import javafx.beans.property.adapter.JavaBeanStringPropertyBuilder;
+import javafx.animation.FadeTransition;
+import javafx.animation.Transition;
+import javafx.beans.Observable;
+import javafx.css.TransitionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -15,13 +17,12 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +51,7 @@ public final class GameController implements Initializable {
   /*
 
    */
-  private SudokuBoard sudokuBoard = new PlainSudokuGenerator().generateSudoku(SudokuGenerator.Difficulty.EASY);
+  private final SudokuBoard sudokuBoard = new PlainSudokuGenerator().generateSudoku(SudokuGenerator.Difficulty.EASY);
 
   public void switchToMainMenu(final MouseEvent e) throws IOException {
     Parent root = FXMLLoader.load(getClass().getResource("/fxml/main.fxml"));
@@ -63,6 +64,7 @@ public final class GameController implements Initializable {
   private void clickCell(final MouseEvent e) {
     /*
     each text field has an id "rXcY"
+    where X is its rowNr and Y colNr
     so the index of rowNr is 1 (X)
     and index of colNr is 3 (Y)
      */
@@ -70,6 +72,8 @@ public final class GameController implements Initializable {
     final int rowIndex = 1;
 
     Text temp = (Text) e.getTarget();
+    animateClick(temp);
+
     String id = temp.getId();
     int colNr = id.charAt(colIndex) - '0'; // good old C tricks
     int rowNr = id.charAt(rowIndex) - '0';
@@ -81,6 +85,17 @@ public final class GameController implements Initializable {
     }
 
     logger.debug("Clicked Cell {} {} {}", colNr, rowNr, e.getButton());
+  }
+
+  private void animateClick(final Text temp) {
+    FadeTransition translate = new FadeTransition(Duration.millis(400), temp);
+    translate.setToValue(0.7);
+
+    FadeTransition translateBack = new FadeTransition(Duration.millis(400), temp);
+    translateBack.setToValue(1);
+
+    translate.setOnFinished(event -> translateBack.play());
+    translate.play();
   }
 
   private void updateEmptyCell(final MouseEvent event, final Text cell, final int rowNr, final int colNr) {
