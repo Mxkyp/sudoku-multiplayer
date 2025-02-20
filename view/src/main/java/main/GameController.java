@@ -67,11 +67,16 @@ public final class GameController implements Initializable {
     int colNr = id.charAt(colIndex) - '0'; // good old C tricks
     int rowNr = id.charAt(rowIndex) - '0';
 
-    int number = Integer.parseInt(temp.getText());
-    final int newNumber = (++number) % (BOARD_SIZE + 1);
+    if (temp.getText().isEmpty()) {
+      temp.setText("1");
+      sudokuBoard.setCell(rowNr, colNr, 1);
+    } else {
+      int number = Integer.parseInt(temp.getText());
+      final int newNumber = (++number) % (BOARD_SIZE + 1);
 
-    sudokuBoard.setCell(rowNr, colNr, newNumber);
-    textNode[rowNr][colNr].setText(Integer.toString(newNumber));
+      sudokuBoard.setCell(rowNr, colNr, newNumber);
+      textNode[rowNr][colNr].setText(Integer.toString(newNumber));
+    }
     logger.debug("Clicked Cell {} {}", colNr, rowNr);
   }
 
@@ -93,7 +98,14 @@ public final class GameController implements Initializable {
   private void setTextNode(final int row, final int col) {
     final double wWidth = 50.0;
     final int fontSize = 24;
-    textNode[row][col] = new Text(Integer.toString(sudokuBoard.getCell(row, col)));
+    final String initValue = Integer.toString(sudokuBoard.getCell(row, col));
+
+    if (!initValue.equals("0")) {
+    textNode[row][col] = new Text(initValue);
+    } else {
+      textNode[row][col] = new Text();
+    }
+
     textNode[row][col].setWrappingWidth(wWidth);
     textNode[row][col].minHeight(wWidth);
     textNode[row][col].setFont(Font.font("DejaVu Sans ExtraLight", fontSize));
