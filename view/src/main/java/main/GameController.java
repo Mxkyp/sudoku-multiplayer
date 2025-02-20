@@ -11,6 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -59,7 +60,12 @@ public final class GameController implements Initializable {
     stage.show();
   }
 
-  public void clickCell(final MouseEvent e) {
+  private void clickCell(final MouseEvent e) {
+    /*
+    each text field has an id "rXcY"
+    so the index of rowNr is 1 (X)
+    and index of colNr is 3 (Y)
+     */
     final int colIndex = 3;
     final int rowIndex = 1;
 
@@ -69,22 +75,46 @@ public final class GameController implements Initializable {
     int rowNr = id.charAt(rowIndex) - '0';
 
     if (temp.getText().isEmpty()) {
-      temp.setText("1");
-      sudokuBoard.setCell(rowNr, colNr, 1);
+      updateEmptyCell(e, temp, rowNr, colNr);
     } else {
-      int number = Integer.parseInt(temp.getText());
-      Integer newNumber = (++number) % (BOARD_SIZE + 1);
-
-      sudokuBoard.setCell(rowNr, colNr, newNumber);
-
-      if (newNumber == 0) {
-        textNode[rowNr][colNr].setText("");
-      } else {
-        textNode[rowNr][colNr].setText(Integer.toString(newNumber));
-      }
+      updateCell(e, temp, rowNr, colNr);
     }
 
     logger.debug("Clicked Cell {} {} {}", colNr, rowNr, e.getButton());
+  }
+
+  private void updateEmptyCell(final MouseEvent event, final Text cell, final int rowNr, final int colNr) {
+
+    final MouseButton buttonPressed = event.getButton();
+    if (buttonPressed == MouseButton.SECONDARY) {
+      cell.setText("9");
+      sudokuBoard.setCell(rowNr, colNr, 9);
+    } else {
+      cell.setText("1");
+      sudokuBoard.setCell(rowNr, colNr, 1);
+    }
+  }
+
+  private void updateCell(final MouseEvent event, final Text cell, final int rowNr, final int colNr) {
+    int number = Integer.parseInt(cell.getText());
+    final MouseButton buttonPressed = event.getButton();
+
+    int newNumber = 0;
+
+    if (buttonPressed == MouseButton.SECONDARY) {
+      newNumber = (--number) % (BOARD_SIZE + 1);
+    } else {
+      newNumber = (++number) % (BOARD_SIZE + 1);
+    }
+
+    sudokuBoard.setCell(rowNr, colNr, newNumber);
+
+    if (newNumber == 0) {
+      textNode[rowNr][colNr].setText("");
+    } else {
+      textNode[rowNr][colNr].setText(Integer.toString(newNumber));
+    }
+
   }
 
   @Override
@@ -103,32 +133,38 @@ public final class GameController implements Initializable {
 
 
   private void setTextNode(final int row, final int col) {
-    final double wWidth = 50.0;
-    final int fontSize = 24;
-    final String initValue = Integer.toString(sudokuBoard.getCell(row, col));
+    final String initValue = Integer.toString(sudokuBoard.getCellValue(row, col));
 
     if (!initValue.equals("0")) {
-      setDefaultCell(row, col, fontSize, initValue);
+      setDefaultCell(row, col, initValue);
     } else {
-      setEmptyCell(row, col, fontSize);
+      setEmptyCell(row, col);
     }
 
+    setCommonAttributes(row, col);
+  }
+
+  private void setDefaultCell(final int row, final int col, final String initValue) {
+    textNode[row][col] = new Text(initValue);
+    textNode[row][col].setFont(Font.font("DejaVu Sans"));
+  }
+
+  private void setEmptyCell(final int row, final int col) {
+    textNode[row][col] = new Text();
+    textNode[row][col].setOnMouseClicked(this::clickCell);
+    textNode[row][col].setFont(Font.font("DejaVu Sans ExtraLight"));
+    textNode[row][col].setFill(Color.DARKSLATEGRAY);
+  }
+
+  private void setCommonAttributes(final int row, final int col) {
+    final double wWidth = 50.0;
+    final int fontSize = 24;
+    textNode[row][col].setFont(Font.font(textNode[row][col].getFont().getFamily(), fontSize));
     textNode[row][col].setWrappingWidth(wWidth);
     textNode[row][col].minHeight(wWidth);
     textNode[row][col].setTextAlignment(TextAlignment.CENTER);
     textNode[row][col].setId("r" + row + "c" + col);
   }
 
-  private void setEmptyCell(final int row, final int col, final int fontSize) {
-    textNode[row][col] = new Text();
-    textNode[row][col].setOnMouseClicked(this::clickCell);
-    textNode[row][col].setFont(Font.font("DejaVu Sans ExtraLight", fontSize));
-    textNode[row][col].setFill(Color.DARKSLATEGRAY);
-  }
-
-  private void setDefaultCell(final int row, final int col, final int fontSize, final String initValue) {
-    textNode[row][col] = new Text(initValue);
-    textNode[row][col].setFont(Font.font("DejaVu Sans", fontSize));
-  }
 
 }
