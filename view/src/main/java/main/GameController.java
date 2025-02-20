@@ -4,9 +4,6 @@ import board.SudokuBoard;
 import game.logic.PlainSudokuGenerator;
 import game.logic.SudokuGenerator;
 import javafx.animation.FadeTransition;
-import javafx.animation.Transition;
-import javafx.beans.Observable;
-import javafx.css.TransitionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -20,11 +17,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import popups.GameExitPopUp;
 
 import java.io.IOException;
 import java.net.URL;
@@ -53,7 +50,13 @@ public final class GameController implements Initializable {
    */
   private final SudokuBoard sudokuBoard = new PlainSudokuGenerator().generateSudoku(SudokuGenerator.Difficulty.EASY);
 
-  public void switchToMainMenu(final MouseEvent e) throws IOException {
+  public void switchToMainMenu(final MouseEvent e) throws IOException, InterruptedException {
+    //TODO: fix the popUp
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/gameExitPopUp.fxml"));
+    Parent root2 = loader.load();
+    GameExitPopUp switchToMenu = loader.getController();
+    switchToMenu.loadWindow();
+
     Parent root = FXMLLoader.load(getClass().getResource("/fxml/main.fxml"));
     stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
     scene = new Scene(root);
