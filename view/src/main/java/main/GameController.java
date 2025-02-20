@@ -17,6 +17,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
@@ -72,12 +73,18 @@ public final class GameController implements Initializable {
       sudokuBoard.setCell(rowNr, colNr, 1);
     } else {
       int number = Integer.parseInt(temp.getText());
-      final int newNumber = (++number) % (BOARD_SIZE + 1);
+      Integer newNumber = (++number) % (BOARD_SIZE + 1);
 
       sudokuBoard.setCell(rowNr, colNr, newNumber);
-      textNode[rowNr][colNr].setText(Integer.toString(newNumber));
+
+      if (newNumber == 0) {
+        textNode[rowNr][colNr].setText("");
+      } else {
+        textNode[rowNr][colNr].setText(Integer.toString(newNumber));
+      }
     }
-    logger.debug("Clicked Cell {} {}", colNr, rowNr);
+
+    logger.debug("Clicked Cell {} {} {}", colNr, rowNr, e.getButton());
   }
 
   @Override
@@ -101,17 +108,27 @@ public final class GameController implements Initializable {
     final String initValue = Integer.toString(sudokuBoard.getCell(row, col));
 
     if (!initValue.equals("0")) {
-    textNode[row][col] = new Text(initValue);
+      setDefaultCell(row, col, fontSize, initValue);
     } else {
-      textNode[row][col] = new Text();
+      setEmptyCell(row, col, fontSize);
     }
 
     textNode[row][col].setWrappingWidth(wWidth);
     textNode[row][col].minHeight(wWidth);
-    textNode[row][col].setFont(Font.font("DejaVu Sans ExtraLight", fontSize));
     textNode[row][col].setTextAlignment(TextAlignment.CENTER);
     textNode[row][col].setId("r" + row + "c" + col);
+  }
+
+  private void setEmptyCell(final int row, final int col, final int fontSize) {
+    textNode[row][col] = new Text();
     textNode[row][col].setOnMouseClicked(this::clickCell);
+    textNode[row][col].setFont(Font.font("DejaVu Sans ExtraLight", fontSize));
+    textNode[row][col].setFill(Color.DARKSLATEGRAY);
+  }
+
+  private void setDefaultCell(final int row, final int col, final int fontSize, final String initValue) {
+    textNode[row][col] = new Text(initValue);
+    textNode[row][col].setFont(Font.font("DejaVu Sans", fontSize));
   }
 
 }
