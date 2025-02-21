@@ -10,7 +10,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -22,7 +24,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import popups.GameExitPopUp;
 
 import java.io.IOException;
 import java.net.URL;
@@ -46,22 +47,28 @@ public final class GameController implements Initializable {
   public GridPane sudokuPane;
   public Text[][] textNode = new Text[BOARD_SIZE][BOARD_SIZE];
 
-  /*
-
-   */
   private final SudokuBoard sudokuBoard = new PlainSudokuGenerator().generateSudoku(SudokuGenerator.Difficulty.EASY);
 
   public void switchToMainMenu(final MouseEvent e) throws IOException, InterruptedException {
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/gameExitPopUp.fxml"));
-    Parent root2 = loader.load();
-    GameExitPopUp switchToMenu = loader.getController();
-    if(switchToMenu.loadWindow()) {
+    Alert alert = getLeaveAlert();
+
+    if (alert.showAndWait().get() == ButtonType.OK) {
       Parent root = FXMLLoader.load(getClass().getResource("/fxml/main.fxml"));
       stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
       scene = new Scene(root);
       stage.setScene(scene);
       stage.show();
     }
+  }
+
+  private Alert getLeaveAlert() {
+    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+
+    alert.setTitle("leave to Main menu");
+    alert.setHeaderText("Discard all your progress and return to main menu");
+    alert.setContentText("Are you sure?");
+
+    return alert;
   }
 
   private void clickCell(final MouseEvent e) {
