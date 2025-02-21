@@ -10,6 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -51,17 +52,16 @@ public final class GameController implements Initializable {
   private final SudokuBoard sudokuBoard = new PlainSudokuGenerator().generateSudoku(SudokuGenerator.Difficulty.EASY);
 
   public void switchToMainMenu(final MouseEvent e) throws IOException, InterruptedException {
-    //TODO: fix the popUp
     FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/gameExitPopUp.fxml"));
     Parent root2 = loader.load();
     GameExitPopUp switchToMenu = loader.getController();
-    switchToMenu.loadWindow();
-
-    Parent root = FXMLLoader.load(getClass().getResource("/fxml/main.fxml"));
-    stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-    scene = new Scene(root);
-    stage.setScene(scene);
-    stage.show();
+    if(switchToMenu.loadWindow()) {
+      Parent root = FXMLLoader.load(getClass().getResource("/fxml/main.fxml"));
+      stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+      scene = new Scene(root);
+      stage.setScene(scene);
+      stage.show();
+    }
   }
 
   private void clickCell(final MouseEvent e) {

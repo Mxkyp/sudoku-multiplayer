@@ -8,4 +8,5 @@ module view {
   exports main;
   exports popups;
   opens popups;
+  opens main;
 }

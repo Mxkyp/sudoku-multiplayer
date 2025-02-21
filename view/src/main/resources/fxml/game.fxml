@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.shape.Line?>
 
-<AnchorPane prefHeight="600.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.GameController">
+<AnchorPane fx:id="gamePane" prefHeight="600.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.GameController">
    <children>
       <GridPane fx:id="sudokuPane" gridLinesVisible="true" layoutX="135.0" layoutY="75.0" opacity="0.8">
         <columnConstraints>
