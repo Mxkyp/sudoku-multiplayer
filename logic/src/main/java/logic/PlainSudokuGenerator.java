@@ -1,7 +1,7 @@
 /***
  * Class which genenerates a sudoku with a unique solution
  */
-package game.logic;
+package logic;
 
 import board.SudokuBoard;
 

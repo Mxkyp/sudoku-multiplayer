@@ -1,4 +1,4 @@
-package game.logic;
+package logic;
 
 import board.SudokuBoard;
 import org.junit.jupiter.api.Test;
