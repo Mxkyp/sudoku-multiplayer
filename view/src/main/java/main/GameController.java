@@ -28,7 +28,7 @@ import java.util.ResourceBundle;
 
 
 public final class GameController implements Initializable {
-  final int BOARD_SIZE = 9;
+   final int BOARD_SIZE = 9; //TODO: THIS!
   private static final Logger logger
           = LoggerFactory.getLogger(GameController.class);
 
