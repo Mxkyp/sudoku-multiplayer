@@ -49,7 +49,13 @@ public final class GameController implements Initializable {
 
   private final SudokuBoard sudokuBoard = new PlainSudokuGenerator().generateSudoku(SudokuGenerator.Difficulty.EASY);
 
-  public void switchToMainMenu(final MouseEvent e) throws IOException, InterruptedException {
+
+  /***
+   * Show a popup to alert a user before deleting game and going back to main menu
+   * @param e - clicking the go back button in game
+   * @throws IOException couldn't load the fxml
+   */
+  public void switchToMainMenu(final MouseEvent e) throws IOException {
     Alert alert = getLeaveAlert();
 
     if (alert.showAndWait().get() == ButtonType.OK) {
@@ -64,44 +70,54 @@ public final class GameController implements Initializable {
   private Alert getLeaveAlert() {
     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
-    alert.setTitle("leave to Main menu");
+    alert.setTitle("leave to main menu");
     alert.setHeaderText("Discard all your progress and return to main menu");
     alert.setContentText("Are you sure?");
 
     return alert;
   }
 
+  /***
+   * find the clicked sudokuCell, and update its value
+   * left mouse click - increase value
+   * right moust click - decrease value
+   * @param e mouse click
+   */
   private void clickCell(final MouseEvent e) {
     /*
     each text field has an id "rXcY"
     where X is its rowNr and Y colNr
-    so the index of rowNr is 1 (X)
-    and index of colNr is 3 (Y)
+    so the index of rowNr in a string is 1 (X)
+    and index of colNr in a string is 3 (Y)
      */
     final int colIndex = 3;
     final int rowIndex = 1;
 
-    Text temp = (Text) e.getTarget();
-    animateClick(temp);
+    Text text = (Text) e.getTarget();
+    animateClick(text);
 
-    String id = temp.getId();
+    String id = text.getId();
     int colNr = id.charAt(colIndex) - '0'; // good old C tricks
     int rowNr = id.charAt(rowIndex) - '0';
 
-    if (temp.getText().isEmpty()) {
-      updateEmptyCell(e, temp, rowNr, colNr);
+    if (text.getText().isEmpty()) {
+      updateEmptyCell(e, text, rowNr, colNr);
     } else {
-      updateCell(e, temp, rowNr, colNr);
+      updateCell(e, text, rowNr, colNr);
     }
 
     logger.debug("Clicked Cell {} {} {}", colNr, rowNr, e.getButton());
   }
 
-  private void animateClick(final Text temp) {
-    FadeTransition translate = new FadeTransition(Duration.millis(400), temp);
+  /***
+   * add a slight highlight animation after clicking a cell
+   * @param text - a reference to the text to be animated
+   */
+  private void animateClick(final Text text) {
+    FadeTransition translate = new FadeTransition(Duration.millis(400), text);
     translate.setToValue(0.7);
 
-    FadeTransition translateBack = new FadeTransition(Duration.millis(400), temp);
+    FadeTransition translateBack = new FadeTransition(Duration.millis(400), text);
     translateBack.setToValue(1);
 
     translate.setOnFinished(event -> translateBack.play());
