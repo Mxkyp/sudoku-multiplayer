@@ -79,8 +79,6 @@ public final class GameController implements Initializable {
 
   /***
    * find the clicked sudokuCell, and update its value
-   * left mouse click - increase value
-   * right moust click - decrease value
    * @param e mouse click
    */
   private void clickCell(final MouseEvent e) {
@@ -124,6 +122,16 @@ public final class GameController implements Initializable {
     translate.play();
   }
 
+  /***
+   * method that sets a value to a empty cell based on
+   * which mouse button was pressed<br>
+   * left mouse click - 1<br>
+   * right moust click - 9<br>
+   * @param event - mouse click
+   * @param cell - the cell clicked
+   * @param rowNr - its rowNr
+   * @param colNr - its colNr
+   */
   private void updateEmptyCell(final MouseEvent event, final Text cell, final int rowNr, final int colNr) {
 
     final MouseButton buttonPressed = event.getButton();
@@ -136,6 +144,16 @@ public final class GameController implements Initializable {
     }
   }
 
+  /***
+   method that updates a cell number based on
+   * which mouse button was pressed<br>
+   * left mouse click - increment<br>
+   * right moust click - decrement
+   * @param event - mouse click
+   * @param cell - the cell clicked
+   * @param rowNr - its rowNr
+   * @param colNr - its colNr
+   */
   private void updateCell(final MouseEvent event, final Text cell, final int rowNr, final int colNr) {
     int number = Integer.parseInt(cell.getText());
     final MouseButton buttonPressed = event.getButton();
@@ -158,6 +176,16 @@ public final class GameController implements Initializable {
 
   }
 
+  /***
+   *  initialize and connect the sudokuBoard with its representation
+   * @param location
+   * The location used to resolve relative paths for the root object, or
+   * {@code null} if the location is not known.
+   *
+   * @param resources
+   * The resources used to localize the root object, or {@code null} if
+   * the root object was not localized.
+   */
   @Override
   public void initialize(final URL location, final ResourceBundle resources) {
     addItemsToGridPane();
@@ -172,7 +200,11 @@ public final class GameController implements Initializable {
     }
   }
 
-
+  /***
+   * set text Node to either<br>1.empty sudoku cell<br>2.default unmodifiable filled one
+   * @param row
+   * @param col
+   */
   private void setTextNode(final int row, final int col) {
     final String initValue = Integer.toString(sudokuBoard.getCellValue(row, col));
 
@@ -197,6 +229,11 @@ public final class GameController implements Initializable {
     textNode[row][col].setFill(Color.DARKSLATEGRAY);
   }
 
+  /***
+   * set text Node common visual attributes and give them unique id "rXcY"
+   * @param row - X number used in nodes id
+   * @param col - Y number used in nodes id
+   */
   private void setCommonAttributes(final int row, final int col) {
     final double wWidth = 50.0;
     final int fontSize = 24;
