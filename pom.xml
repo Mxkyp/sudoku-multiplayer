@@ -10,7 +10,8 @@
     <packaging>pom</packaging>
     <modules>
         <module>view</module>
-        <module>core</module>
+        <module>data</module>
+        <module>logic</module>
     </modules>
 
     <properties>
