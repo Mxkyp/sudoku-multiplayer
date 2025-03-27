@@ -1,8 +1,5 @@
 package main;
 
-import board.SudokuBoard;
-import game.logic.PlainSudokuGenerator;
-import game.logic.SudokuGenerator;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,6 +18,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import logic.SudokuGame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,9 +26,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static constans.Dimensions.BOARD_SIZE;
 
 public final class GameController implements Initializable {
+  final int BOARD_SIZE = 9;
   private static final Logger logger
           = LoggerFactory.getLogger(GameController.class);
 
@@ -46,7 +44,7 @@ public final class GameController implements Initializable {
   public GridPane sudokuPane;
   public Text[][] textNode = new Text[BOARD_SIZE][BOARD_SIZE];
 
-  private final SudokuBoard sudokuBoard = new PlainSudokuGenerator().generateSudoku(SudokuGenerator.Difficulty.EASY);
+  private final SudokuGame sudokuGame = new SudokuGame(new logic.PlainSudokuGenerator());
 
 
   /***
@@ -136,10 +134,10 @@ public final class GameController implements Initializable {
     final MouseButton buttonPressed = event.getButton();
     if (buttonPressed == MouseButton.SECONDARY) {
       cell.setText("9");
-      sudokuBoard.setCell(rowNr, colNr, 9);
+      sudokuGame.setCell(rowNr, colNr, 9);
     } else {
       cell.setText("1");
-      sudokuBoard.setCell(rowNr, colNr, 1);
+      sudokuGame.setCell(rowNr, colNr, 1);
     }
   }
 
@@ -165,7 +163,7 @@ public final class GameController implements Initializable {
       newNumber = (++number) % (BOARD_SIZE + 1);
     }
 
-    sudokuBoard.setCell(rowNr, colNr, newNumber);
+    sudokuGame.setCell(rowNr, colNr, newNumber);
 
     if (newNumber == 0) {
       textNode[rowNr][colNr].setText("");
@@ -205,7 +203,7 @@ public final class GameController implements Initializable {
    * @param col
    */
   private void setTextNode(final int row, final int col) {
-    final String initValue = Integer.toString(sudokuBoard.getCellValue(row, col));
+    final String initValue = Integer.toString(sudokuGame.getCellValue(row, col));
 
     if (!initValue.equals("0")) {
       setDefaultCell(row, col, initValue);

@@ -2,7 +2,7 @@ module view {
   requires javafx.fxml;
   requires javafx.graphics;
   requires javafx.controls;
-  requires data;
+  requires logic;
   requires org.slf4j;
 
   exports main;

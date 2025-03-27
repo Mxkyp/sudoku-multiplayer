@@ -10,6 +10,18 @@ import board.SudokuBoard;
 public final class SudokuGame {
   private SudokuBoard board;
 
+  public SudokuGame(final SudokuGenerator generator) {
+    this.board = generator.generateSudoku(SudokuGenerator.Difficulty.EASY);
+  }
+
+  public void setCell(final int rowNr, final int colNr, final int val) {
+    board.setCell(rowNr, colNr, val);
+  }
+
+  public int getCellValue(final int row, final int col) {
+    return board.getCellValue(row, col);
+  }
+
   public enum State {
     WRONG,
     UNKNOWN,
