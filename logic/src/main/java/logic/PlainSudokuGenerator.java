@@ -13,7 +13,11 @@ import static constans.Dimensions.*;
 //TODO:a LOT of refactoring and reStructuring
 public final class PlainSudokuGenerator implements SudokuGenerator {
 
-  @SuppressWarnings("checkstyle:MagicNumber")
+  /***
+   * Generate a unique sudoku solution, TODO: with the minimal number of clues
+   * @param difficulty
+   * @return a valid sudoku puzzle
+   */
   @Override
   public SudokuBoard generateSudoku(final Difficulty difficulty) {
     int[][] mockBoard = new int[BOARD_SIZE][BOARD_SIZE];
@@ -29,9 +33,37 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
             { 0, 9, 0, 0, 0, 0, 4, 0, 0 }
     };
     solveBoard(board);
+    for(int i = 0; i < board.length; i++){
+      mockBoard[i] = Arrays.copyOf(board[i], board.length);
+    }
+
+    int targetEmptyCells = 0;
+    if (difficulty == Difficulty.EASY) {
+      targetEmptyCells = 40;
+    } else if (difficulty == Difficulty.MEDIUM) {
+      targetEmptyCells = 50;
+    } else if (difficulty == Difficulty.HARD) {
+      targetEmptyCells = 60;
+    } else {
+      targetEmptyCells = 64;
+    }
+
+    int counter = 0;
+    while (counter != targetEmptyCells) {
+      if (unsolveBoard(board, mockBoard)) {
+        counter++;
+      }
+    }
+
     return new SudokuBoard(board);
   }
 
+  /***
+   * remove a number from the board, using brute force approach
+   * @param board - the board from which to remove cells
+   * @param originalBoard - the initial solved board
+   * @return true if succeeded, false if removed a empty cell or created a unsolvable board
+   */
   private static boolean unsolveBoard(final int[][] board, final int[][] originalBoard) {
     int row;
     int col;
@@ -41,20 +73,21 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
     row = rand.nextInt(0, BOARD_SIZE);
     col = rand.nextInt(0, BOARD_SIZE);
 
-
     for (int i = 0; i < BOARD_SIZE; i++) {
       System.arraycopy(board[i], 0, dummyBoard[i], 0, BOARD_SIZE);
     }
 
     dummyBoard[row][col] = 0;
     solveBoard(dummyBoard);
+
     if (compareArrays(originalBoard, dummyBoard)) {
-      board[row][col] = 0;
-      counter++;
-      return unsolveBoard(board, dummyBoard, counter);
-    } else {
-      return false;
+      if (board[row][col] != 0) {
+        board[row][col] = 0;
+        return true;
+      }
     }
+
+    return false;
   }
 
   private static boolean compareArrays(final int[][] copy,
