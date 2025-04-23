@@ -192,7 +192,7 @@ public final class GameController implements Initializable {
     for (int r = 0; r < BOARD_SIZE; r++) {
       for (int c = 0; c < BOARD_SIZE; c++) {
         setTextNode(r, c);
-        sudokuPane.add(textNode[r][c], r, c);
+        sudokuPane.add(textNode[r][c], c, r);
       }
     }
   }

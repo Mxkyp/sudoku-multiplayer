@@ -17,37 +17,19 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
   @Override
   public SudokuBoard generateSudoku(final Difficulty difficulty) {
     int[][] mockBoard = new int[BOARD_SIZE][BOARD_SIZE];
-    int[][] array = {
-            {7, 0, 2, 0, 5, 0, 6, 0, 0},
-            {0, 0, 0, 0, 0, 3, 0, 0, 0},
-            {1, 0, 0, 0, 0, 9, 5, 0, 0},
-
-            {8, 0, 0, 0, 0, 0, 0, 9, 0},
-            {0, 4, 3, 0, 0, 0, 7, 5, 0},
-            {0, 9, 0, 0, 0, 0, 0, 0, 8},
-
-            {0, 0, 9, 7, 0, 0, 0, 0, 5},
-            {0, 0, 0, 2, 0, 0, 0, 0, 0},
-            {0, 0, 7, 0, 4, 0, 2, 0, 3}
+    int[][] board = {
+            { 8, 0, 0, 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 3, 6, 0, 0, 0, 0, 0 },
+            { 0, 7, 0, 0, 9, 0, 2, 0, 0 },
+            { 0, 5, 0, 0, 0, 7, 0, 0, 0 },
+            { 0, 0, 0, 0, 4, 5, 7, 0, 0 },
+            { 0, 0, 0, 1, 0, 0, 0, 3, 0 },
+            { 0, 0, 1, 0, 0, 0, 0, 6, 8 },
+            { 0, 0, 8, 5, 0, 0, 0, 1, 0 },
+            { 0, 9, 0, 0, 0, 0, 4, 0, 0 }
     };
-
-    solveBoard(array);
-    for (int i = 0; i < 64; i++){
-      unsolveBoard(array, Arrays.copyOf(array, BOARD_SIZE * BOARD_SIZE));
-    }
-    return new SudokuBoard(array);
-  }
-
-  private static boolean solveBoard(final int[][] board) {
-    for (int row = 0; row < BOARD_SIZE; row++) {
-      for (int column = 0; column < BOARD_SIZE; column++) {
-        //cell is unfilled
-        if (board[row][column] == 0) {
-          return tryFillingCell(board, row, column);
-        }
-      }
-    }
-    return true;
+    solveBoard(board);
+    return new SudokuBoard(board);
   }
 
   private static boolean unsolveBoard(final int[][] board, final int[][] originalBoard) {
@@ -68,7 +50,8 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
     solveBoard(dummyBoard);
     if (compareArrays(originalBoard, dummyBoard)) {
       board[row][col] = 0;
-      return unsolveBoard(board, dummyBoard);
+      counter++;
+      return unsolveBoard(board, dummyBoard, counter);
     } else {
       return false;
     }
@@ -76,15 +59,29 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
 
   private static boolean compareArrays(final int[][] copy,
                                        final int[][] original) {
-      for (int i = 0; i < original.length; i++) {
-        for (int j = 0; j < original[0].length; j++) {
-          if (copy[i][j] != original[i][j]) {
-            return false;
-          }
+    for (int i = 0; i < original.length; i++) {
+      for (int j = 0; j < original[0].length; j++) {
+        if (copy[i][j] != original[i][j]) {
+          return false;
         }
       }
-      return true;
+    }
+    return true;
   }
+
+  private static boolean solveBoard(final int[][] board) {
+    for (int row = 0; row < BOARD_SIZE; row++) {
+      for (int column = 0; column < BOARD_SIZE; column++) {
+        //cell is unfilled
+        if (board[row][column] == 0) {
+          return tryFillingCell(board, row, column);
+        }
+      }
+    }
+    return true;
+  }
+
+
 
 
   private static boolean tryFillingCell(final int[][] board,
@@ -133,7 +130,7 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
                                          final int value) {
     return !rowContainsValue(board, row, value)
             && !colContainsValue(board, col, value)
-            && !subBoardContains(board, row / SUB_BOARD_SIZE * SUB_BOARD_SIZE + col / SUB_BOARD_SIZE, value);
+            && !subBoardContains(board, row, col, value);
   }
 
   private static boolean triedAll(final boolean[] triedValue) {
@@ -157,7 +154,6 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
     return false;
   }
 
-
   private static boolean colContainsValue(final int[][] board,
                                           final int column,
                                           final int value) {
@@ -170,32 +166,21 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
   }
 
   private static boolean subBoardContains(final int[][] board,
-                                          final int index,
+                                          final int row,
+                                          final int col,
                                           final int value) {
 
-    Point startPoint = computeSubBoardCoords(index);
+    int startRow = (row / SUB_BOARD_SIZE) * SUB_BOARD_SIZE;
+    int startCol = (col / SUB_BOARD_SIZE) * SUB_BOARD_SIZE;
+
     for (int i = 0; i < SUB_BOARD_SIZE; i++) {
       for (int j = 0; j < SUB_BOARD_SIZE; j++) {
-        if (board[startPoint.y + i][startPoint.x + j] == value) {
+        if (board[startRow + i][startCol + j] == value) {
           return true;
         }
       }
     }
     return false;
   }
-
-  /*
-   compute the left upper corner coordinates for each subBoard
-   */
-  private static Point computeSubBoardCoords(final int subBoardIndex) {
-    final int[] subBoardLeftCornerRowNr = {0, 3, 6};
-    final int[] subBoardLeftCornerColNr = {0, 3, 6};
-
-    return new Point(subBoardLeftCornerColNr[subBoardIndex % SUB_BOARD_SIZE],
-            subBoardLeftCornerRowNr[subBoardIndex / SUB_BOARD_SIZE]);
-  }
-
-
-
 
 }
