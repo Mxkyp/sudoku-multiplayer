@@ -43,7 +43,6 @@ public final class GameController implements Initializable {
   @FXML
   public GridPane sudokuPane;
   public Text[][] textNode = new Text[BOARD_SIZE][BOARD_SIZE];
-
   private final SudokuGame sudokuGame = new SudokuGame(new logic.PlainSudokuGenerator());
 
 
@@ -240,6 +239,5 @@ public final class GameController implements Initializable {
     textNode[row][col].setTextAlignment(TextAlignment.CENTER);
     textNode[row][col].setId("r" + row + "c" + col);
   }
-
 
 }

@@ -1,5 +1,5 @@
 /***
- * Class which genenerates a sudoku with a unique solution
+ * Class which generates a sudoku with a unique solution
  */
 package logic;
 
@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.Random;
 
 import static constans.Dimensions.*;
-//TODO:a LOT of refactoring and reStructuring
 public final class PlainSudokuGenerator implements SudokuGenerator {
 
   /***
@@ -19,36 +18,28 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
    */
   @Override
   public SudokuBoard generateSudoku(final Difficulty difficulty) {
-    int[][] mockBoard = new int[BOARD_SIZE][BOARD_SIZE];
-    int[][] board = {
-            { 8, 0, 0, 0, 0, 0, 0, 0, 0 },
-            { 0, 0, 3, 6, 0, 0, 0, 0, 0 },
-            { 0, 7, 0, 0, 9, 0, 2, 0, 0 },
-            { 0, 5, 0, 0, 0, 7, 0, 0, 0 },
-            { 0, 0, 0, 0, 4, 5, 7, 0, 0 },
-            { 0, 0, 0, 1, 0, 0, 0, 3, 0 },
-            { 0, 0, 1, 0, 0, 0, 0, 6, 8 },
-            { 0, 0, 8, 5, 0, 0, 0, 1, 0 },
-            { 0, 9, 0, 0, 0, 0, 4, 0, 0 }
+    final int[][] board = {
+            {8, 0, 0, 0, 0, 0, 0, 0, 0 },
+            {0, 0, 3, 6, 0, 0, 0, 0, 0 },
+            {0, 7, 0, 0, 9, 0, 2, 0, 0 },
+            {0, 5, 0, 0, 0, 7, 0, 0, 0 },
+            {0, 0, 0, 0, 4, 5, 7, 0, 0 },
+            {0, 0, 0, 1, 0, 0, 0, 3, 0 },
+            {0, 0, 1, 0, 0, 0, 0, 6, 8 },
+            {0, 0, 8, 5, 0, 0, 0, 1, 0 },
+            {0, 9, 0, 0, 0, 0, 4, 0, 0 }
     };
     solveBoard(board);
+
+    int[][] mockBoard = new int[BOARD_SIZE][BOARD_SIZE];
     for(int i = 0; i < board.length; i++){
       mockBoard[i] = Arrays.copyOf(board[i], board.length);
     }
 
-    int targetEmptyCells = 0;
-    if (difficulty == Difficulty.EASY) {
-      targetEmptyCells = 40;
-    } else if (difficulty == Difficulty.MEDIUM) {
-      targetEmptyCells = 50;
-    } else if (difficulty == Difficulty.HARD) {
-      targetEmptyCells = 60;
-    } else {
-      targetEmptyCells = 64;
-    }
+    int emptyCellNumber = getEmptyCellNumber(difficulty);
 
     int counter = 0;
-    while (counter != targetEmptyCells) {
+    while (counter != emptyCellNumber) {
       if (unsolveBoard(board, mockBoard)) {
         counter++;
       }
@@ -58,12 +49,46 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
   }
 
   /***
+   * Recursive sudoku solver
+   * @param board representing the 9x9 sudoku puzzle
+   * @return unique solution of the given board
+   */
+  private static boolean solveBoard(final int[][] board) {
+    for (int row = 0; row < BOARD_SIZE; row++) {
+      for (int column = 0; column < BOARD_SIZE; column++) {
+        //cell is unfilled
+        if (board[row][column] == 0) {
+          return tryFillingCell(board, row, column);
+        }
+      }
+    }
+    return true;
+  }
+
+  private int getEmptyCellNumber(final Difficulty difficulty) {
+    int targetEmptyCells;
+
+    if (difficulty == Difficulty.EASY) {
+      targetEmptyCells = 40;
+    } else if (difficulty == Difficulty.MEDIUM) {
+      targetEmptyCells = 50;
+    } else if (difficulty == Difficulty.HARD) {
+      targetEmptyCells = 60;
+    } else {
+      targetEmptyCells = 64;
+    }
+    return targetEmptyCells;
+  }
+
+  /***
    * remove a number from the board, using brute force approach
    * @param board - the board from which to remove cells
    * @param originalBoard - the initial solved board
-   * @return true if succeeded, false if removed a empty cell or created a unsolvable board
+   * @return true if succeeded, false if removed an empty cell
+   *         or created an unsolvable board
    */
-  private static boolean unsolveBoard(final int[][] board, final int[][] originalBoard) {
+  private static boolean unsolveBoard(final int[][] board,
+                                      final int[][] originalBoard) {
     int row;
     int col;
     Random rand = new Random();
@@ -87,35 +112,6 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
     }
 
     return false;
-  }
-
-  private static boolean compareArrays(final int[][] copy,
-                                       final int[][] original) {
-    for (int i = 0; i < original.length; i++) {
-      for (int j = 0; j < original[0].length; j++) {
-        if (copy[i][j] != original[i][j]) {
-          return false;
-        }
-      }
-    }
-    return true;
-  }
-
-  /***
-   * Recursive sudoku solver
-   * @param board representing the 9x9 sudoku puzzle
-   * @return unique solution of the given board
-   */
-  private static boolean solveBoard(final int[][] board) {
-    for (int row = 0; row < BOARD_SIZE; row++) {
-      for (int column = 0; column < BOARD_SIZE; column++) {
-        //cell is unfilled
-        if (board[row][column] == 0) {
-          return tryFillingCell(board, row, column);
-        }
-      }
-    }
-    return true;
   }
 
   /**
@@ -151,6 +147,23 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
     return false;
   }
 
+  private static boolean compareArrays(final int[][] copy,
+                                       final int[][] original) {
+    for (int i = 0; i < original.length; i++) {
+      for (int j = 0; j < original[0].length; j++) {
+        if (copy[i][j] != original[i][j]) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  /***
+   * get random val from 1-9 that is not tried
+   * @param triedValue an array of tried values from 1-9
+   * @return a valid val from 1-9 or -1 if all have been tried
+   */
   private static int getRandomValue(final boolean[] triedValue) {
     if (triedAll(triedValue)) {
       return -1;
@@ -166,6 +179,14 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
     return digit;
   }
 
+  /**
+   * verify a board after placing a @param value in cell[row][col]
+   * @param board
+   * @param row
+   * @param col
+   * @param value
+   * @return true if the new state is valid else false
+   */
   private static boolean verifyPlacement(final int[][] board,
                                          final int row, final int col,
                                          final int value) {
@@ -174,6 +195,12 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
             && !subBoardContains(board, row, col, value);
   }
 
+  /**
+   * check if all values between 1-9 have been tried
+   * @param triedValue a bool array where index = number and
+   *                   true represents that it has been tried
+   * @return
+   */
   private static boolean triedAll(final boolean[] triedValue) {
     for (boolean tried: triedValue) {
       if (!tried) {

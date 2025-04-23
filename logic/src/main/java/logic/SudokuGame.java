@@ -25,7 +25,7 @@ public final class SudokuGame {
   public enum State {
     WRONG,
     UNKNOWN,
-    CORRECT;
+    CORRECT
   }
 
 }

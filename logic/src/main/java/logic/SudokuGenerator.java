@@ -7,7 +7,7 @@ public interface SudokuGenerator {
     enum Difficulty {
         EASY,
         MEDIUM,
-        HARD;
+        HARD
     }
 
     SudokuBoard generateSudoku(Difficulty difficulty);
