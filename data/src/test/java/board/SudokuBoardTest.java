@@ -39,7 +39,7 @@ class SudokuBoardTest {
 
 
     //get shall return a hardcopy
-    @Test void testGetBoard(){
+    @Test void testGet(){
         SudokuCell[][] boardCopy = testBoard.getBoard();
 
         boardCopy[0][0].setValue(10);

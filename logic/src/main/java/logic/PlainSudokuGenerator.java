@@ -5,7 +5,6 @@ package logic;
 
 import board.SudokuBoard;
 
-import java.awt.Point;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -102,6 +101,11 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
     return true;
   }
 
+  /***
+   * Recursive sudoku solver
+   * @param board representing the 9x9 sudoku puzzle
+   * @return unique solution of the given board
+   */
   private static boolean solveBoard(final int[][] board) {
     for (int row = 0; row < BOARD_SIZE; row++) {
       for (int column = 0; column < BOARD_SIZE; column++) {
@@ -114,9 +118,13 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
     return true;
   }
 
-
-
-
+  /**
+   * attempt filling a cell properly with sudoku rules
+   * @param board
+   * @param row
+   * @param col
+   * @return
+   */
   private static boolean tryFillingCell(final int[][] board,
                                         final int row, final int col) {
     boolean[] triedVal = new boolean[BOARD_SIZE + 1];

@@ -28,7 +28,7 @@ public final class SudokuBoard extends Board {
   }
 
   public SudokuCell[][] getBoard() {
-    return super.getBoard(BOARD_SIZE, this.board);
+    return super.get(BOARD_SIZE, this.board);
   }
 
   public int getCellValue(final int rowIndex, final int colIndex) {

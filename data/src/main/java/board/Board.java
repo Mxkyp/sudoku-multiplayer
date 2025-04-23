@@ -8,8 +8,8 @@ abstract class Board {
   private static final Logger logger =
           LoggerFactory.getLogger(Board.class);
 
-    SudokuCell[][] getBoard(final int size,
-                                   final SudokuCell[][] originalBoard) {
+    SudokuCell[][] get(final int size,
+                       final SudokuCell[][] originalBoard) {
 
       SudokuCell[][] boardCopy = new SudokuCell[size][size];
 

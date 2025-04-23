@@ -12,7 +12,6 @@ public final class SudokuGame {
 
   public SudokuGame(final SudokuGenerator generator) {
     this.board = generator.generateSudoku(SudokuGenerator.Difficulty.EASY);
-    this.board.printBoard();
   }
 
   public void setCell(final int rowNr, final int colNr, final int val) {
