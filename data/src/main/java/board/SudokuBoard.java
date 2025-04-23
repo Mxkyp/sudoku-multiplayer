@@ -13,10 +13,9 @@ import static constans.Dimensions.BOARD_SIZE;
 import static constans.Dimensions.MIN_INDEX;
 import static constans.Dimensions.MAX_INDEX;
 
-public final class SudokuBoard extends Board {
+public final class SudokuBoard implements Board {
   private static final Logger logger =
           LoggerFactory.getLogger(SudokuBoard.class);
-
   private final SudokuCell[][] board = new SudokuCell[BOARD_SIZE][BOARD_SIZE];
 
   public SudokuBoard(final int[][] dummyBoard) {
@@ -28,16 +27,42 @@ public final class SudokuBoard extends Board {
   }
 
   public SudokuCell[][] getBoard() {
-    return super.get(BOARD_SIZE, this.board);
+    SudokuCell[][] boardCopy = new SudokuCell[BOARD_SIZE][BOARD_SIZE];
+
+    for (int i = 0; i < BOARD_SIZE; i++) {
+      for (int j = 0; j < BOARD_SIZE; j++) {
+        boardCopy[i][j] = new SudokuCell(this.board[i][j].getValue());
+      }
+    }
+
+    return boardCopy;
   }
 
   public int getCellValue(final int rowIndex, final int colIndex) {
-    return super.getCellValue(rowIndex, colIndex,
-            MAX_INDEX, MIN_INDEX, this.board);
+    int result = -1;
+
+    if (rowIndex >= MIN_INDEX && colIndex >= MIN_INDEX
+            && rowIndex <= MAX_INDEX && colIndex <= MAX_INDEX) {
+      result = board[rowIndex][colIndex].getValue();
+    }
+
+    return result;
   }
 
   public void printBoard() {
-    super.printBoard(this.board);
+    final int initCapacity = 100;
+    StringBuffer buffer = new StringBuffer(initCapacity);
+
+    buffer.append("\n");
+    for (SudokuCell[] row: board) {
+      for (SudokuCell cell: row) {
+        buffer.append(cell.getValue());
+        buffer.append(" ");
+      }
+      buffer.append("\n");
+    }
+
+    logger.info(buffer.toString());
   }
 
   private void initBoard(final int[][] values)            {

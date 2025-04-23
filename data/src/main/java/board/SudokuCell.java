@@ -3,7 +3,7 @@
  */
 package board;
 
-public final class SudokuCell {
+public final class SudokuCell implements Cell {
     private int value;
 
     public SudokuCell(final int value) {
