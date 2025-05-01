@@ -17,6 +17,7 @@ public class connectionTest {
     InetAddress localhost = InetAddress.getLocalHost();
 
     try (GameHost gameHost = new GameHost(hostTcpPort)) {
+
       try(GamePlayer gamePlayer = new GamePlayer()) {
         final String hostAddr = localhost.getHostAddress();
         gamePlayer.connectToHost(hostAddr, hostTcpPort);
@@ -26,11 +27,13 @@ public class connectionTest {
 
         String received = gameHost.getMsgReceived();
 
+        //TODO: stop this from busy waiting
         while(received == null) {
           received = gameHost.getMsgReceived();
         }
         assertEquals(received, msgToSend);
       }
+
     } catch (IOException e) {
       fail("Server creation or client connection failed");
     } catch (Exception e) {
