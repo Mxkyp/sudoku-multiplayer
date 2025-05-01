@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class connectionTest {
@@ -20,8 +21,15 @@ public class connectionTest {
         final String hostAddr = localhost.getHostAddress();
         gamePlayer.connectToHost(hostAddr, hostTcpPort);
 
-        gameHost.receiveUpdate();
-        gamePlayer.send("message");
+        final String msgToSend = "message";
+        gamePlayer.send(msgToSend);
+
+        String received = gameHost.getMsgReceived();
+
+        while(received == null) {
+          received = gameHost.getMsgReceived();
+        }
+        assertEquals(received, msgToSend);
       }
     } catch (IOException e) {
       fail("Server creation or client connection failed");
