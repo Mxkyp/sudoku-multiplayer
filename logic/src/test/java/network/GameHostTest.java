@@ -12,16 +12,14 @@ class GameHostTest {
 
   @Test
   void testCreateServer() throws IOException {
-    GameHost gameHost = new GameHost();
-    /*
-    try (GameHost gameHost = new GameHost()) {
+    final int tcpPort = 54777;
+    try (GameHost gameHost = new GameHost(tcpPort)) {
 
     } catch (IOException e) {
       fail("server creation failed");
     } catch (Exception e) {
       fail("close failed");
     }
-     */
   }
 
 }

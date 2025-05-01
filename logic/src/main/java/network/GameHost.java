@@ -5,10 +5,9 @@ import com.esotericsoftware.kryonet.Server;
 import java.io.IOException;
 
 public final class GameHost implements AutoCloseable {
-  Server server;
+  final Server server;
 
-  public GameHost() throws IOException {
-    final int tcpPort = 54777;
+  public GameHost(final int tcpPort) throws IOException {
     server = new Server();
     server.start();
     server.bind(tcpPort);
