@@ -19,6 +19,9 @@ public class connectionTest {
       try(GamePlayer gamePlayer = new GamePlayer()) {
         final String hostAddr = localhost.getHostAddress();
         gamePlayer.connectToHost(hostAddr, hostTcpPort);
+
+        gameHost.receiveUpdate();
+        gamePlayer.send("message");
       }
     } catch (IOException e) {
       fail("Server creation or client connection failed");
