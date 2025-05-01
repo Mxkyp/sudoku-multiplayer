@@ -32,7 +32,7 @@ public final class GamePlayer implements AutoCloseable {
 
   private void addClientListener() {
     client.addListener(new Listener() {
-      public void received(Connection connection, Object object) {
+      public void received(final Connection connection, final Object object) {
         if (object instanceof String) {
           String update = (String) object;
         }
