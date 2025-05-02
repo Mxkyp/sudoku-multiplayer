@@ -19,13 +19,13 @@ public final class GameHost implements AutoCloseable {
     addServerListener();
   }
 
-  public String getMsgReceived() {
-    String update = msgQue.poll();
-    return update;
+  public String getMsg() {
+    return msgQue.poll();
   }
 
   void send(final String message) {
-    //server.sendToTCP(); add this
+    Connection connection = server.getConnections()[0]; //get id
+    server.sendToTCP(connection.getID(), message);
   }
 
   private void addServerListener() {

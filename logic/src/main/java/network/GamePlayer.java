@@ -19,6 +19,11 @@ public final class GamePlayer implements AutoCloseable {
 
     client.start();
     client.connect(timeOutMs, hostUniqueIp, hostTcpPort);
+    addClientListener();
+  }
+
+  public String getMsg() {
+    return msgQue.poll();
   }
 
   void send(final String message) {
@@ -34,7 +39,7 @@ public final class GamePlayer implements AutoCloseable {
     client.addListener(new Listener() {
       public void received(final Connection connection, final Object object) {
         if (object instanceof String) {
-          String update = (String) object;
+          msgQue.add((String) object);
         }
       }
     });
