@@ -54,7 +54,7 @@ public class connectionTest {
         gamePlayer.connectToHost(hostAddr, hostTcpPort);
 
         final String msgToSend = "message2";
-        gameHost.send(msgToSend);
+        gameHost.sendToEachClient(msgToSend);
 
         String received = gamePlayer.getMsg();
 
