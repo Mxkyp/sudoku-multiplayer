@@ -38,28 +38,21 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
   }
 
   @Override
-  public SudokuBoard createPuzzleFromSolved(SudokuBoard sudoku, Difficulty difficulty) {
-    int[][] board = new int[9][9];
-    for(int i = 0; i < 9; i++){
-      for (int j = 0; j < 9; j++) {
-        board[i][j] = sudoku.getCellValue(i, j);
-      }
-    }
-    int[][] mockBoard = new int[BOARD_SIZE][BOARD_SIZE];
-    for(int i = 0; i < board.length; i++){
-      mockBoard[i] = Arrays.copyOf(board[i], board.length);
-    }
+  public SudokuBoard createPuzzleFromSolved(final SudokuBoard solved, final Difficulty difficulty) {
+    int[][] puzzleToBe = solved.getBoard();
 
     int emptyCellNumber = getEmptyCellNumber(difficulty);
 
     int counter = 0;
+
+    int[][] solvedBoard = solved.getBoard();
     while (counter != emptyCellNumber) {
-      if (unsolveBoard(board, mockBoard)) {
+      if (unsolveBoard(puzzleToBe, solvedBoard)) {
         counter++;
       }
     }
 
-    return new SudokuBoard(board);
+    return new SudokuBoard(puzzleToBe);
   }
 
   /***

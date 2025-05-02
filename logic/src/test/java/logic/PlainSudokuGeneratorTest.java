@@ -7,15 +7,13 @@ public class PlainSudokuGeneratorTest {
 
     @Test void getRandomNumber(){
         PlainSudokuGenerator sudokuGenerator = new PlainSudokuGenerator();
-        sudokuGenerator.generateSudoku(SudokuGenerator.Difficulty.EASY);
+        sudokuGenerator.generateSudoku();
     }
 
     @Test void testGenerateSudoku(){
         PlainSudokuGenerator sudokuGenerator = new PlainSudokuGenerator();
-        SudokuBoard boardy = sudokuGenerator.generateSudoku(SudokuGenerator.Difficulty.EASY);
+        SudokuBoard boardy = sudokuGenerator.generateSudoku();
         boardy.printBoard();
-
-
     }
 
 }
