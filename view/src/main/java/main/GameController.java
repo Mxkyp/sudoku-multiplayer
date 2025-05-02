@@ -40,7 +40,7 @@ public final class GameController implements Initializable {
   @Override
   public void initialize(final URL location, final ResourceBundle resources) {
     boardView = new BoardView(sudokuPane);
-    boardView.addItemsToGridPane(this::clickCell, );
+    boardView.addItemsToGridPane(this::clickCell, game.getPuzzle());
   }
 
   /***

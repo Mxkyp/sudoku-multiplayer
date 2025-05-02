@@ -17,12 +17,12 @@ import static constans.Dimensions.MAX_INDEX;
 public final class SudokuBoard implements Board {
   private static final Logger logger =
           LoggerFactory.getLogger(SudokuBoard.class);
-  private final SudokuCell[][] board = new SudokuCell[BOARD_SIZE][BOARD_SIZE];
+  private final int[][] board = new int[BOARD_SIZE][BOARD_SIZE];
 
   public SudokuBoard(final int[][] dummyBoard) {
     for (int i = 0; i < BOARD_SIZE; i++) {
       for (int j = 0; j < BOARD_SIZE; j++) {
-        this.board[i][j] = new SudokuCell(dummyBoard[i][j]);
+        this.board[i][j] = dummyBoard[i][j];
       }
     }
   }
@@ -30,28 +30,16 @@ public final class SudokuBoard implements Board {
   public SudokuBoard(final SudokuBoard boardToCopy) {
     for (int i = 0; i < BOARD_SIZE; i++) {
       for (int j = 0; j < BOARD_SIZE; j++) {
-        this.board[i][j] = new SudokuCell(boardToCopy.getCellValue(i, j));
+        this.board[i][j] = boardToCopy.getCellValue(i, j);
       }
     }
   }
 
   public void setCell(final int y, final int x, final int value) {
-    this.board[y][x].setValue(value);
+    this.board[y][x] = value;
   }
 
-  public SudokuCell[][] getBoard() {
-    SudokuCell[][] boardCopy = new SudokuCell[BOARD_SIZE][BOARD_SIZE];
-
-    for (int i = 0; i < BOARD_SIZE; i++) {
-      for (int j = 0; j < BOARD_SIZE; j++) {
-        boardCopy[i][j] = new SudokuCell(this.board[i][j].getValue());
-      }
-    }
-
-    return boardCopy;
-  }
-
-  public int[][] getIntRepresentation() {
+  public int[][] getBoard() {
     int[][] board = new int[BOARD_SIZE][BOARD_SIZE];
     for (int i = 0; i < BOARD_SIZE; i++) {
       for (int j = 0; j < BOARD_SIZE; j++) {
@@ -66,7 +54,7 @@ public final class SudokuBoard implements Board {
 
     if (rowIndex >= MIN_INDEX && colIndex >= MIN_INDEX
             && rowIndex <= MAX_INDEX && colIndex <= MAX_INDEX) {
-      result = board[rowIndex][colIndex].getValue();
+      result = board[rowIndex][colIndex];
     }
 
     return result;
@@ -77,9 +65,9 @@ public final class SudokuBoard implements Board {
     StringBuffer buffer = new StringBuffer(initCapacity);
 
     buffer.append("\n");
-    for (SudokuCell[] row : board) {
-      for (SudokuCell cell : row) {
-        buffer.append(cell.getValue());
+    for (int[] row : board) {
+      for (int cell : row) {
+        buffer.append(cell);
         buffer.append(" ");
       }
       buffer.append("\n");

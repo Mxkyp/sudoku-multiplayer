@@ -9,7 +9,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import logic.SudokuGame;
 
 public final class BoardView {
 
@@ -52,10 +51,10 @@ public final class BoardView {
 
   }
 
-  public void addItemsToGridPane(final EventHandler<MouseEvent> eventHandler, final SudokuGame sudokuGame) {
+  public void addItemsToGridPane(final EventHandler<MouseEvent> eventHandler, final int[][] puzzle) {
     for (int r = 0; r < BOARD_SIZE; r++) {
       for (int c = 0; c < BOARD_SIZE; c++) {
-        String initText = Integer.toString(sudokuGame.getCellValue(r, c));
+        String initText = Integer.toString(puzzle[r][c]);
         setTextNode(r, c, eventHandler, initText);
         sudokuPane.add(textNode[r][c], c, r);
       }

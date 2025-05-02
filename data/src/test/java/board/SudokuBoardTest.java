@@ -40,11 +40,11 @@ class SudokuBoardTest {
 
     //get shall return a hardcopy
     @Test void testGet(){
-        SudokuCell[][] boardCopy = testBoard.getBoard();
+        int[][] boardCopy = testBoard.getBoard();
 
-        boardCopy[0][0].setValue(10);
+        boardCopy[0][0] = 10;
 
-        assertNotEquals(testBoard.getCellValue(0, 0), boardCopy[0][0].getValue());
+        assertNotEquals(testBoard.getCellValue(0, 0), boardCopy[0][0]);
     }
 
     //trying to get a value outside the board index_range returns -1

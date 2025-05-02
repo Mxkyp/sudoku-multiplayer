@@ -17,8 +17,8 @@ public final class SudokuGame {
     startingPuzzle = generator.createPuzzleFromSolved(solved, SudokuGenerator.Difficulty.EASY);
   }
 
-  public int[][] getSolved() {
-    return startingPuzzle.getIntRepresentation();
+  public int[][] getPuzzle() {
+    return startingPuzzle.getBoard();
   }
 
   public State checkState(final SudokuBoard board) {

@@ -4,7 +4,6 @@
 package logic;
 
 import board.SudokuBoard;
-import board.SudokuCell;
 
 import java.util.Arrays;
 import java.util.Random;
