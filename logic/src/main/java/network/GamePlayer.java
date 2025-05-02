@@ -3,19 +3,17 @@ package network;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-
 import java.io.IOException;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
- * Represents a game player that can connect to a game host, send messages, and receive messages asynchronously.
+ * Represents a game player that can connect to a game host,
+ * send messages, and receive messages asynchronously.
  * <p>
- * Implements {@link AutoCloseable} to ensure the underlying client connection can be properly closed.
+ * Implements {@link AutoCloseable}
+ * to ensure the underlying client connection can be properly closed.
  */
-public final class GamePlayer implements AutoCloseable {
+public final class GamePlayer extends AsyncMessenger implements AutoCloseable {
   final Client client = new Client();
-  private final Queue<String> msgQue = new ConcurrentLinkedQueue<>();
 
   /**
    * Connects this player to a remote game host.
@@ -31,15 +29,6 @@ public final class GamePlayer implements AutoCloseable {
     client.start();
     client.connect(timeOutMs, hostUniqueIp, hostTcpPort);
     addClientListener();
-  }
-
-  /**
-   * Retrieves and removes the next received message,
-   * or returns {@code null} if no messages are available.
-   * @return the next received message, or {@code null} if the queue is empty
-   */
-  public String getMsg() {
-    return msgQue.poll();
   }
 
   /**
@@ -61,7 +50,7 @@ public final class GamePlayer implements AutoCloseable {
     client.addListener(new Listener() {
       public void received(final Connection connection, final Object object) {
         if (object instanceof String) {
-          msgQue.add((String) object);
+          storeMessage((String) object);
         }
       }
     });

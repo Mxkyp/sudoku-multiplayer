@@ -14,9 +14,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * <p>
  * Implements {@link AutoCloseable} to allow proper shutdown of the server.
  */
-public final class GameHost implements AutoCloseable {
+public final class GameHost extends AsyncMessenger implements AutoCloseable {
   private final Server server;
-  private final Queue<String> msgQue = new ConcurrentLinkedQueue<>();
 
   /**
    * Creates a new game host and binds it to the specified TCP port.
@@ -28,15 +27,6 @@ public final class GameHost implements AutoCloseable {
     server.start();
     server.bind(tcpPort);
     addServerListener();
-  }
-
-  /**
-   * Retrieves and removes the next received message,
-   * or returns {@code null} if no messages are available.
-   * @return the next received message, or {@code null} if the queue is empty
-   */
-  public String getMsg() {
-    return msgQue.poll();
   }
 
   /**
@@ -58,7 +48,7 @@ public final class GameHost implements AutoCloseable {
     server.addListener(new Listener() {
       public void received(final Connection connection, final Object object) {
         if (object instanceof String) {
-          msgQue.add((String) object);
+          storeMessage((String) object);
         }
       }
     });
