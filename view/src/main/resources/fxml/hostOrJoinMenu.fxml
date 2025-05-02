@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxml.HostOrJoinMenu">
+   <children>
+      <Button fx:id="startMultiBTN" layoutX="260.0" layoutY="282.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="80.0" text="start" />
+      <Text layoutX="273.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nickname" wrappingWidth="53.3828125" />
+      <TextField fx:id="nickNameTF" layoutX="225.0" layoutY="89.0" />
+      <Text layoutX="270.0" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Game code" />
+      <TextField fx:id="gameCodeTF" layoutX="225.0" layoutY="172.0" />
+      <Text layoutX="204.0" layoutY="219.0" strokeType="OUTSIDE" strokeWidth="0.0" text="(copy this and send to your friends!)" wrappingWidth="191.3826904296875" />
+   </children>
+</AnchorPane>

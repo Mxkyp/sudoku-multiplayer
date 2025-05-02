@@ -9,16 +9,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import logic.SudokuGame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,25 +21,31 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-
 public final class GameController implements Initializable {
-   final int BOARD_SIZE = 9; //TODO: THIS!
   private static final Logger logger
           = LoggerFactory.getLogger(GameController.class);
 
   private Stage stage;
   private Scene scene;
-  private Parent root;
-
-  /*
-    sudokuBoard and individual cell
-    text fields gui representation
-   */
   @FXML
-  public GridPane sudokuPane;
-  public Text[][] textNode = new Text[BOARD_SIZE][BOARD_SIZE];
-  private final SudokuGame sudokuGame = new SudokuGame(new logic.PlainSudokuGenerator());
+  private GridPane sudokuPane;
+  private BoardView boardView;
 
+  /***
+   *  initialize and connect the sudokuBoard with its representation
+   * @param location
+   * The location used to resolve relative paths for the root object, or
+   * {@code null} if the location is not known.
+   *
+   * @param resources
+   * The resources used to localize the root object, or {@code null} if
+   * the root object was not localized.
+   */
+  @Override
+  public void initialize(final URL location, final ResourceBundle resources) {
+    boardView = new BoardView(sudokuPane);
+    boardView.addItemsToGridPane(this::clickCell);
+  }
 
   /***
    * Show a popup to alert a user before deleting game and going back to main menu
@@ -95,9 +96,9 @@ public final class GameController implements Initializable {
     int rowNr = id.charAt(rowIndex) - '0';
 
     if (text.getText().isEmpty()) {
-      updateEmptyCell(e, text, rowNr, colNr);
+      boardView.updateEmptyCell(e, text, rowNr, colNr);
     } else {
-      updateCell(e, text, rowNr, colNr);
+      boardView.updateCell(e, text, rowNr, colNr);
     }
 
     logger.debug("Clicked Cell {} {} {}", colNr, rowNr, e.getButton());
@@ -118,126 +119,7 @@ public final class GameController implements Initializable {
     translate.play();
   }
 
-  /***
-   * method that sets a value to a empty cell based on
-   * which mouse button was pressed<br>
-   * left mouse click - 1<br>
-   * right moust click - 9<br>
-   * @param event - mouse click
-   * @param cell - the cell clicked
-   * @param rowNr - its rowNr
-   * @param colNr - its colNr
-   */
-  private void updateEmptyCell(final MouseEvent event, final Text cell, final int rowNr, final int colNr) {
 
-    final MouseButton buttonPressed = event.getButton();
-    if (buttonPressed == MouseButton.SECONDARY) {
-      cell.setText("9");
-      sudokuGame.setCell(rowNr, colNr, 9);
-    } else {
-      cell.setText("1");
-      sudokuGame.setCell(rowNr, colNr, 1);
-    }
-  }
 
-  /***
-   method that updates a cell number based on
-   * which mouse button was pressed<br>
-   * left mouse click - increment<br>
-   * right moust click - decrement
-   * @param event - mouse click
-   * @param cell - the cell clicked
-   * @param rowNr - its rowNr
-   * @param colNr - its colNr
-   */
-  private void updateCell(final MouseEvent event, final Text cell, final int rowNr, final int colNr) {
-    int number = Integer.parseInt(cell.getText());
-    final MouseButton buttonPressed = event.getButton();
-
-    int newNumber = 0;
-
-    if (buttonPressed == MouseButton.SECONDARY) {
-      newNumber = (--number) % (BOARD_SIZE + 1);
-    } else {
-      newNumber = (++number) % (BOARD_SIZE + 1);
-    }
-
-    sudokuGame.setCell(rowNr, colNr, newNumber);
-
-    if (newNumber == 0) {
-      textNode[rowNr][colNr].setText("");
-    } else {
-      textNode[rowNr][colNr].setText(Integer.toString(newNumber));
-    }
-
-  }
-
-  /***
-   *  initialize and connect the sudokuBoard with its representation
-   * @param location
-   * The location used to resolve relative paths for the root object, or
-   * {@code null} if the location is not known.
-   *
-   * @param resources
-   * The resources used to localize the root object, or {@code null} if
-   * the root object was not localized.
-   */
-  @Override
-  public void initialize(final URL location, final ResourceBundle resources) {
-    addItemsToGridPane();
-  }
-
-  private void addItemsToGridPane() {
-    for (int r = 0; r < BOARD_SIZE; r++) {
-      for (int c = 0; c < BOARD_SIZE; c++) {
-        setTextNode(r, c);
-        sudokuPane.add(textNode[r][c], c, r);
-      }
-    }
-  }
-
-  /***
-   * set text Node to either<br>1.empty sudoku cell<br>2.default unmodifiable filled one
-   * @param row
-   * @param col
-   */
-  private void setTextNode(final int row, final int col) {
-    final String initValue = Integer.toString(sudokuGame.getCellValue(row, col));
-
-    if (!initValue.equals("0")) {
-      setDefaultCell(row, col, initValue);
-    } else {
-      setEmptyCell(row, col);
-    }
-
-    setCommonAttributes(row, col);
-  }
-
-  private void setDefaultCell(final int row, final int col, final String initValue) {
-    textNode[row][col] = new Text(initValue);
-    textNode[row][col].setFont(Font.font("DejaVu Sans"));
-  }
-
-  private void setEmptyCell(final int row, final int col) {
-    textNode[row][col] = new Text();
-    textNode[row][col].setOnMouseClicked(this::clickCell);
-    textNode[row][col].setFont(Font.font("DejaVu Sans ExtraLight"));
-    textNode[row][col].setFill(Color.DARKSLATEGRAY);
-  }
-
-  /***
-   * set text Node common visual attributes and give them unique id "rXcY"
-   * @param row - X number used in nodes id
-   * @param col - Y number used in nodes id
-   */
-  private void setCommonAttributes(final int row, final int col) {
-    final double wWidth = 50.0;
-    final int fontSize = 24;
-    textNode[row][col].setFont(Font.font(textNode[row][col].getFont().getFamily(), fontSize));
-    textNode[row][col].setWrappingWidth(wWidth);
-    textNode[row][col].minHeight(wWidth);
-    textNode[row][col].setTextAlignment(TextAlignment.CENTER);
-    textNode[row][col].setId("r" + row + "c" + col);
-  }
 
 }
