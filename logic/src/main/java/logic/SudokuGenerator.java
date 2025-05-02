@@ -10,5 +10,6 @@ public interface SudokuGenerator {
         HARD
     }
 
-    SudokuBoard generateSudoku(Difficulty difficulty);
+    SudokuBoard generateSudoku();
+    SudokuBoard createPuzzleFromSolved(SudokuBoard board, Difficulty difficulty);
 }

@@ -6,20 +6,23 @@
 package logic;
 
 import board.SudokuBoard;
+import org.apache.commons.lang3.NotImplementedException;
 
 public final class SudokuGame {
-  private SudokuBoard board;
+  private SudokuBoard solved;
+  private SudokuBoard startingPuzzle;
 
   public SudokuGame(final SudokuGenerator generator) {
-    this.board = generator.generateSudoku(SudokuGenerator.Difficulty.EASY);
+    this.solved = generator.generateSudoku();
+    startingPuzzle = generator.createPuzzleFromSolved(solved, SudokuGenerator.Difficulty.EASY);
   }
 
-  public void setCell(final int rowNr, final int colNr, final int val) {
-    board.setCell(rowNr, colNr, val);
+  public int[][] getSolved() {
+    return startingPuzzle.getIntRepresentation();
   }
 
-  public int getCellValue(final int row, final int col) {
-    return board.getCellValue(row, col);
+  public State checkState(final SudokuBoard board) {
+    throw new NotImplementedException();
   }
 
   public enum State {

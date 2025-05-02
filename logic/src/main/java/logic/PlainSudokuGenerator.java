@@ -4,6 +4,7 @@
 package logic;
 
 import board.SudokuBoard;
+import board.SudokuCell;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -16,8 +17,11 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
    * @param difficulty
    * @return a valid sudoku puzzle
    */
+
+
+
   @Override
-  public SudokuBoard generateSudoku(final Difficulty difficulty) {
+  public SudokuBoard generateSudoku() {
     final int[][] board = {
             {8, 0, 0, 0, 0, 0, 0, 0, 0 },
             {0, 0, 3, 6, 0, 0, 0, 0, 0 },
@@ -31,6 +35,17 @@ public final class PlainSudokuGenerator implements SudokuGenerator {
     };
     solveBoard(board);
 
+    return new SudokuBoard(board);
+  }
+
+  @Override
+  public SudokuBoard createPuzzleFromSolved(SudokuBoard sudoku, Difficulty difficulty) {
+    int[][] board = new int[9][9];
+    for(int i = 0; i < 9; i++){
+      for (int j = 0; j < 9; j++) {
+        board[i][j] = sudoku.getCellValue(i, j);
+      }
+    }
     int[][] mockBoard = new int[BOARD_SIZE][BOARD_SIZE];
     for(int i = 0; i < board.length; i++){
       mockBoard[i] = Arrays.copyOf(board[i], board.length);

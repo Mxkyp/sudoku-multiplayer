@@ -1,7 +1,7 @@
 module logic {
   requires data;
-  requires java.desktop;
   requires kryonet;
+  requires org.apache.commons.lang3;
 
   exports logic to view;
 }

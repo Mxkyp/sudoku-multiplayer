@@ -35,12 +35,12 @@ public final class GameController implements Initializable {
   @FXML
   private GridPane sudokuPane;
   private BoardView boardView;
+  private SudokuGame game = new SudokuGame(new logic.PlainSudokuGenerator());
 
   @Override
   public void initialize(final URL location, final ResourceBundle resources) {
     boardView = new BoardView(sudokuPane);
-    boardView.addItemsToGridPane(this::clickCell,
-            new SudokuGame(new logic.PlainSudokuGenerator()));
+    boardView.addItemsToGridPane(this::clickCell, );
   }
 
   /***

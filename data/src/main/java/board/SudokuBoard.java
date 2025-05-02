@@ -6,6 +6,7 @@
  * 3.nine columns
  */
 package board;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +27,14 @@ public final class SudokuBoard implements Board {
     }
   }
 
+  public SudokuBoard(final SudokuBoard boardToCopy) {
+    for (int i = 0; i < BOARD_SIZE; i++) {
+      for (int j = 0; j < BOARD_SIZE; j++) {
+        this.board[i][j] = new SudokuCell(boardToCopy.getCellValue(i, j));
+      }
+    }
+  }
+
   public void setCell(final int y, final int x, final int value) {
     this.board[y][x].setValue(value);
   }
@@ -40,6 +49,16 @@ public final class SudokuBoard implements Board {
     }
 
     return boardCopy;
+  }
+
+  public int[][] getIntRepresentation() {
+    int[][] board = new int[BOARD_SIZE][BOARD_SIZE];
+    for (int i = 0; i < BOARD_SIZE; i++) {
+      for (int j = 0; j < BOARD_SIZE; j++) {
+        board[i][j] = this.getCellValue(i, j);
+      }
+    }
+    return board;
   }
 
   public int getCellValue(final int rowIndex, final int colIndex) {
@@ -58,8 +77,8 @@ public final class SudokuBoard implements Board {
     StringBuffer buffer = new StringBuffer(initCapacity);
 
     buffer.append("\n");
-    for (SudokuCell[] row: board) {
-      for (SudokuCell cell: row) {
+    for (SudokuCell[] row : board) {
+      for (SudokuCell cell : row) {
         buffer.append(cell.getValue());
         buffer.append(" ");
       }
@@ -68,8 +87,6 @@ public final class SudokuBoard implements Board {
 
     logger.info(buffer.toString());
   }
-
-
 
 
 }
