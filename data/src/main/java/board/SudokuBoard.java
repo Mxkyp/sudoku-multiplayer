@@ -19,7 +19,11 @@ public final class SudokuBoard implements Board {
   private final SudokuCell[][] board = new SudokuCell[BOARD_SIZE][BOARD_SIZE];
 
   public SudokuBoard(final int[][] dummyBoard) {
-    initBoard(dummyBoard);
+    for (int i = 0; i < BOARD_SIZE; i++) {
+      for (int j = 0; j < BOARD_SIZE; j++) {
+        this.board[i][j] = new SudokuCell(dummyBoard[i][j]);
+      }
+    }
   }
 
   public void setCell(final int y, final int x, final int value) {
@@ -65,13 +69,6 @@ public final class SudokuBoard implements Board {
     logger.info(buffer.toString());
   }
 
-  private void initBoard(final int[][] values)            {
-    for (int i = 0; i < BOARD_SIZE; i++) {
-      for (int j = 0; j < BOARD_SIZE; j++) {
-        this.board[i][j] = new SudokuCell(values[i][j]);
-      }
-    }
-  }
 
 
 

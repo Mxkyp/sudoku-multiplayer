@@ -22,13 +22,22 @@ public final class MainMenuController {
     switchToGameScene(e);
   }
 
-  public void playMultiplayer(ActionEvent e) {
+  public void playMultiplayer(ActionEvent e) throws IOException {
     logger.debug("Pressed the multiplayer button");
+    switchToMultiplayerMenu(e);
   }
 
 
   public void switchToGameScene(ActionEvent e) throws IOException {
     Parent root = FXMLLoader.load(getClass().getResource("/fxml/game.fxml"));
+    stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+    scene = new Scene(root);
+    stage.setScene(scene);
+    stage.show();
+  }
+
+  public void switchToMultiplayerMenu(ActionEvent e) throws IOException {
+    Parent root = FXMLLoader.load(getClass().getResource("/fxml/multiplayer.fxml"));
     stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
     scene = new Scene(root);
     stage.setScene(scene);

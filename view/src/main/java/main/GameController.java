@@ -14,6 +14,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import model.BoardView;
+import model.CellView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,16 +33,6 @@ public final class GameController implements Initializable {
   private GridPane sudokuPane;
   private BoardView boardView;
 
-  /***
-   *  initialize and connect the sudokuBoard with its representation
-   * @param location
-   * The location used to resolve relative paths for the root object, or
-   * {@code null} if the location is not known.
-   *
-   * @param resources
-   * The resources used to localize the root object, or {@code null} if
-   * the root object was not localized.
-   */
   @Override
   public void initialize(final URL location, final ResourceBundle resources) {
     boardView = new BoardView(sudokuPane);
@@ -96,9 +88,9 @@ public final class GameController implements Initializable {
     int rowNr = id.charAt(rowIndex) - '0';
 
     if (text.getText().isEmpty()) {
-      boardView.updateEmptyCell(e, text, rowNr, colNr);
+      boardView.updateEmptyCell(new CellView(text, rowNr, colNr, e));
     } else {
-      boardView.updateCell(e, text, rowNr, colNr);
+      boardView.updateCell(new CellView(text, rowNr, colNr, e));
     }
 
     logger.debug("Clicked Cell {} {} {}", colNr, rowNr, e.getButton());

@@ -7,4 +7,6 @@ module view {
 
   exports main;
   opens main;
+  exports model;
+  opens model;
 }

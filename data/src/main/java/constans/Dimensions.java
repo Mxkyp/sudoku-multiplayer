@@ -10,7 +10,6 @@ public final class Dimensions {
     //number of rows and columns in the main board
     public static final int BOARD_SIZE = 9;
 
-    public static final int NR_OF_SUBBOARDS = 9;
 
     public static final int MIN_INDEX = 0;
 
@@ -20,8 +19,6 @@ public final class Dimensions {
     // (each boards has 9 3x3 subBoards)
     public static final int SUB_BOARD_SIZE = 3;
 
-    public static final int SUB_MIN_INDEX = 0;
 
-    public static final int SUB_MAX_INDEX = 2;
 
 }

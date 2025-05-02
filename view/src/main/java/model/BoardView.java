@@ -1,4 +1,4 @@
-package main;
+package model;
 
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -11,59 +11,35 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import logic.SudokuGame;
 
-public class BoardView {
+public final class BoardView {
 
   final int BOARD_SIZE = 9; //TODO: THIS!
-  /*
-    sudokuBoard and individual cell
-    text fields gui representation
-   */
   @FXML
   private GridPane sudokuPane;
-  public Text[][] textNode = new Text[BOARD_SIZE][BOARD_SIZE];
+  private Text[][] textNode = new Text[BOARD_SIZE][BOARD_SIZE];
   private final SudokuGame sudokuGame = new SudokuGame(new logic.PlainSudokuGenerator());
 
-  BoardView(final GridPane sudokuPane) {
+  public BoardView(final GridPane sudokuPane) {
     this.sudokuPane = sudokuPane;
   }
 
-  /***
-   * method that sets a value to a empty cell based on
-   * which mouse button was pressed<br>
-   * left mouse click - 1<br>
-   * right moust click - 9<br>
-   * @param event - mouse click
-   * @param cell - the cell clicked
-   * @param rowNr - its rowNr
-   * @param colNr - its colNr
-   */
-  public void updateEmptyCell(final MouseEvent event, final Text cell, final int rowNr, final int colNr) {
-
-    final MouseButton buttonPressed = event.getButton();
-    if (buttonPressed == MouseButton.SECONDARY) {
+  public void updateEmptyCell(final CellView cell) {
+    if (cell.getButtonPressed() == MouseButton.SECONDARY) {
       cell.setText("9");
-      sudokuGame.setCell(rowNr, colNr, 9);
+      sudokuGame.setCell(cell.getRowNr(), cell.getColNr(), 9);
     } else {
       cell.setText("1");
-      sudokuGame.setCell(rowNr, colNr, 1);
+      sudokuGame.setCell(cell.getRowNr(), cell.getColNr(), 1);
     }
   }
 
-  /***
-   method that updates a cell number based on
-   * which mouse button was pressed<br>
-   * left mouse click - increment<br>
-   * right moust click - decrement
-   * @param event - mouse click
-   * @param cell - the cell clicked
-   * @param rowNr - its rowNr
-   * @param colNr - its colNr
-   */
-  public void updateCell(final MouseEvent event, final Text cell, final int rowNr, final int colNr) {
+  public void updateCell(final CellView cell) {
     int number = Integer.parseInt(cell.getText());
-    final MouseButton buttonPressed = event.getButton();
+    final MouseButton buttonPressed = cell.getButtonPressed();
 
     int newNumber = 0;
+    final int rowNr = cell.getRowNr();
+    final int colNr = cell.getColNr();
 
     if (buttonPressed == MouseButton.SECONDARY) {
       newNumber = (--number) % (BOARD_SIZE + 1);
@@ -90,11 +66,6 @@ public class BoardView {
     }
   }
 
-  /***
-   * set text Node to either<br>1.empty sudoku cell<br>2.default unmodifiable filled one
-   * @param row
-   * @param col
-   */
   private void setTextNode(final int row, final int col,  final EventHandler<MouseEvent> eventHandler) {
     final String initValue = Integer.toString(sudokuGame.getCellValue(row, col));
 
@@ -133,4 +104,5 @@ public class BoardView {
     textNode[row][col].setTextAlignment(TextAlignment.CENTER);
     textNode[row][col].setId("r" + row + "c" + col);
   }
+
 }
