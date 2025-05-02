@@ -16,6 +16,8 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.BoardView;
 import model.CellView;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,6 +73,24 @@ public final class GameController implements Initializable {
    * @param e mouse click
    */
   private void clickCell(final MouseEvent e) {
+    Text text = (Text) e.getTarget();
+    animateClick(text);
+    String id = text.getId();
+
+    int[] rowColNr = parseForRowColNr(id);
+    int rowNr = rowColNr[0];
+    int colNr = rowColNr[1];
+
+    if (text.getText().isEmpty()) {
+      boardView.updateEmptyCell(new CellView(text, rowNr, colNr, e));
+    } else {
+      boardView.updateCell(new CellView(text, rowNr, colNr, e));
+    }
+
+    logger.debug("Clicked Cell {} {} {}", colNr, rowNr, e.getButton());
+  }
+
+  private int[] parseForRowColNr(final String id) {
     /*
     each text field has an id "rXcY"
     where X is its rowNr and Y colNr
@@ -80,20 +100,10 @@ public final class GameController implements Initializable {
     final int colIndex = 3;
     final int rowIndex = 1;
 
-    Text text = (Text) e.getTarget();
-    animateClick(text);
-
-    String id = text.getId();
     int colNr = id.charAt(colIndex) - '0'; // good old C tricks
     int rowNr = id.charAt(rowIndex) - '0';
 
-    if (text.getText().isEmpty()) {
-      boardView.updateEmptyCell(new CellView(text, rowNr, colNr, e));
-    } else {
-      boardView.updateCell(new CellView(text, rowNr, colNr, e));
-    }
-
-    logger.debug("Clicked Cell {} {} {}", colNr, rowNr, e.getButton());
+    return new int[]{rowNr, colNr};
   }
 
   /***
