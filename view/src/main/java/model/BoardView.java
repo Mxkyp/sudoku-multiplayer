@@ -17,7 +17,6 @@ public final class BoardView {
   @FXML
   private GridPane sudokuPane;
   private Text[][] textNode = new Text[BOARD_SIZE][BOARD_SIZE];
-  private final SudokuGame sudokuGame = new SudokuGame(new logic.PlainSudokuGenerator());
 
   public BoardView(final GridPane sudokuPane) {
     this.sudokuPane = sudokuPane;
@@ -26,10 +25,8 @@ public final class BoardView {
   public void updateEmptyCell(final CellView cell) {
     if (cell.getButtonPressed() == MouseButton.SECONDARY) {
       cell.setText("9");
-      sudokuGame.setCell(cell.getRowNr(), cell.getColNr(), 9);
     } else {
       cell.setText("1");
-      sudokuGame.setCell(cell.getRowNr(), cell.getColNr(), 1);
     }
   }
 
@@ -47,8 +44,6 @@ public final class BoardView {
       newNumber = (++number) % (BOARD_SIZE + 1);
     }
 
-    sudokuGame.setCell(rowNr, colNr, newNumber);
-
     if (newNumber == 0) {
       textNode[rowNr][colNr].setText("");
     } else {
@@ -57,20 +52,19 @@ public final class BoardView {
 
   }
 
-  public void addItemsToGridPane(final EventHandler<MouseEvent> eventHandler) {
+  public void addItemsToGridPane(final EventHandler<MouseEvent> eventHandler, final SudokuGame sudokuGame) {
     for (int r = 0; r < BOARD_SIZE; r++) {
       for (int c = 0; c < BOARD_SIZE; c++) {
-        setTextNode(r, c, eventHandler);
+        String initText = Integer.toString(sudokuGame.getCellValue(r, c));
+        setTextNode(r, c, eventHandler, initText);
         sudokuPane.add(textNode[r][c], c, r);
       }
     }
   }
 
-  private void setTextNode(final int row, final int col,  final EventHandler<MouseEvent> eventHandler) {
-    final String initValue = Integer.toString(sudokuGame.getCellValue(row, col));
-
-    if (!initValue.equals("0")) {
-      setDefaultCell(row, col, initValue);
+  private void setTextNode(final int row, final int col,  final EventHandler<MouseEvent> eventHandler, final String initText) {
+    if (!initText.equals("0")) {
+      setDefaultCell(row, col, initText);
     } else {
       setEmptyCell(row, col, eventHandler);
     }
