@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * Designed to be extended by classes
  * that receive messages from external sources.
  */
-public class AsyncMessenger {
+public abstract class AsyncMessageReceiver {
   private final Queue<String> msgQue = new ConcurrentLinkedQueue<>();
 
   /**
@@ -22,13 +22,12 @@ public class AsyncMessenger {
     return msgQue.poll();
   }
 
-
   /**
    * Stores a new message in the internal message queue.
    *
    * @param mess the message to store
    */
-  public void storeMessage(String mess) {
+  public void storeMessage(final String mess) {
     msgQue.add(mess);
   }
 

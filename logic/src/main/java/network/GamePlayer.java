@@ -3,6 +3,7 @@ package network;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+
 import java.io.IOException;
 
 /**
@@ -12,7 +13,8 @@ import java.io.IOException;
  * Implements {@link AutoCloseable}
  * to ensure the underlying client connection can be properly closed.
  */
-public final class GamePlayer extends AsyncMessenger implements AutoCloseable {
+public final class GamePlayer
+        extends AsyncMessageReceiver implements AutoCloseable {
   final Client client = new Client();
 
   /**

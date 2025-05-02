@@ -5,8 +5,6 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
 import java.io.IOException;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Represents a game host that accepts client connections,
@@ -14,11 +12,13 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * <p>
  * Implements {@link AutoCloseable} to allow proper shutdown of the server.
  */
-public final class GameHost extends AsyncMessenger implements AutoCloseable {
+public final class GameHost
+        extends AsyncMessageReceiver implements AutoCloseable {
   private final Server server;
 
   /**
    * Creates a new game host and binds it to the specified TCP port.
+   *
    * @param tcpPort the TCP port on which the server will listen for connections
    * @throws IOException if the server fails to start or bind to the port
    */
@@ -31,6 +31,7 @@ public final class GameHost extends AsyncMessenger implements AutoCloseable {
 
   /**
    * Sends a message to all currently connected clients.
+   *
    * @param message the message to broadcast to clients
    */
   void sendToEachClient(final String message) {
